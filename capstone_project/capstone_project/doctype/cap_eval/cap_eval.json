@@ -9,7 +9,12 @@
   "section_break_1wkk",
   "amended_from",
   "curriculum",
-  "evaluation_year"
+  "evaluation_year",
+  "evaluation_round",
+  "evaluator",
+  "section_break_mrhs",
+  "evaluation_type",
+  "clo_number"
  ],
  "fields": [
   {
@@ -29,21 +34,54 @@
   {
    "fieldname": "curriculum",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Curriculum",
-   "options": "EDU Curriculum"
+   "options": "EDU Curriculum",
+   "reqd": 1
   },
   {
    "fieldname": "evaluation_year",
    "fieldtype": "Link",
    "label": "Evaluation Year",
-   "options": "EDU Evaluation Year"
+   "options": "EDU Evaluation Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evaluation_round",
+   "fieldtype": "Select",
+   "label": "Evaluation Round",
+   "options": "Proposal\nProgressive\nFinal",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evaluator",
+   "fieldtype": "Link",
+   "label": "Evaluator",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evaluation_type",
+   "fieldtype": "Select",
+   "label": "Evaluation Type",
+   "options": "Individual\nGroup"
+  },
+  {
+   "fieldname": "section_break_mrhs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "clo_number",
+   "fieldtype": "Int",
+   "label": "CLO#",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-30 17:17:05.565764",
+ "modified": "2026-08-31 13:43:55.040824",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",

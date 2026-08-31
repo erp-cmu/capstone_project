@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/capstone_project/frontend/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+    <script type="module" crossorigin src="/assets/capstone_project/frontend/assets/index-l9ei9aLg.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/capstone_project/frontend/assets/_plugin-vue_export-helper-CHN0FsKE.js">
+    <link rel="stylesheet" crossorigin href="/assets/capstone_project/frontend/assets/index-B4jVoCkO.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  
+          <script>
+              {% for key in boot %}
+              window["{{ key }}"] = {{ boot[key] | tojson }};
+              {% endfor %}
+          </script>
+          </body>
+          
+</html>
