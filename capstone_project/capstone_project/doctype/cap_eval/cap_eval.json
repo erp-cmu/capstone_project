@@ -11,6 +11,7 @@
   "evaluation_year",
   "evaluation_round",
   "column_break_oyga",
+  "capstone_course",
   "evaluator_type",
   "evaluator",
   "amended_from",
@@ -18,6 +19,7 @@
   "evaluation_list",
   "scores_section",
   "clo_number",
+  "clo_description",
   "rubric",
   "score"
  ],
@@ -109,13 +111,25 @@
    "fieldtype": "Link",
    "label": "Evaluator Type",
    "options": "DocType"
+  },
+  {
+   "fieldname": "clo_description",
+   "fieldtype": "Small Text",
+   "label": "CLO Description",
+   "read_only": 1
+  },
+  {
+   "fieldname": "capstone_course",
+   "fieldtype": "Link",
+   "label": "Capstone Course",
+   "options": "EDU Course"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-01 08:56:41.037416",
+ "modified": "2026-09-01 15:13:35.608624",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",
