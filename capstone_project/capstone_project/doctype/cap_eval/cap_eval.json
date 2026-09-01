@@ -6,21 +6,22 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_1wkk",
-  "amended_from",
+  "general_information_section",
   "curriculum",
   "evaluation_year",
   "evaluation_round",
+  "column_break_oyga",
+  "evaluator_type",
   "evaluator",
-  "section_break_mrhs",
-  "evaluation_type",
-  "clo_number"
+  "amended_from",
+  "evaluation_section",
+  "evaluation_list",
+  "scores_section",
+  "clo_number",
+  "rubric",
+  "score"
  ],
  "fields": [
-  {
-   "fieldname": "section_break_1wkk",
-   "fieldtype": "Section Break"
-  },
   {
    "fieldname": "amended_from",
    "fieldtype": "Link",
@@ -55,33 +56,66 @@
   },
   {
    "fieldname": "evaluator",
-   "fieldtype": "Link",
+   "fieldtype": "Dynamic Link",
    "label": "Evaluator",
-   "options": "Employee",
+   "options": "evaluator_type",
    "reqd": 1
-  },
-  {
-   "fieldname": "evaluation_type",
-   "fieldtype": "Select",
-   "label": "Evaluation Type",
-   "options": "Individual\nGroup"
-  },
-  {
-   "fieldname": "section_break_mrhs",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "clo_number",
    "fieldtype": "Int",
    "label": "CLO#",
    "reqd": 1
+  },
+  {
+   "fieldname": "evaluation_list",
+   "fieldtype": "Table",
+   "label": "Evaluation List",
+   "options": "CAP Eval List"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Table",
+   "label": "Score",
+   "options": "CAP Eval Score"
+  },
+  {
+   "fieldname": "rubric",
+   "fieldtype": "Small Text",
+   "label": "Rubric",
+   "read_only": 1
+  },
+  {
+   "fieldname": "general_information_section",
+   "fieldtype": "Section Break",
+   "label": "General Information"
+  },
+  {
+   "fieldname": "column_break_oyga",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "evaluation_section",
+   "fieldtype": "Section Break",
+   "label": "Evaluation"
+  },
+  {
+   "fieldname": "scores_section",
+   "fieldtype": "Section Break",
+   "label": "Scores"
+  },
+  {
+   "fieldname": "evaluator_type",
+   "fieldtype": "Link",
+   "label": "Evaluator Type",
+   "options": "DocType"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-08-31 13:43:55.040824",
+ "modified": "2026-09-01 08:56:41.037416",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",

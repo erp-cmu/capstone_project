@@ -14,15 +14,20 @@ class CAPEval(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
+		from capstone_project.capstone_project.doctype.cap_eval_list.cap_eval_list import CAPEvalList
+		from capstone_project.capstone_project.doctype.cap_eval_score.cap_eval_score import CAPEvalScore
 		from frappe.types import DF
 
 		amended_from: DF.Link | None
 		clo_number: DF.Int
 		curriculum: DF.Link
+		evaluation_list: DF.Table[CAPEvalList]
 		evaluation_round: DF.Literal["Proposal", "Progressive", "Final"]
-		evaluation_type: DF.Literal["Individual", "Group"]
 		evaluation_year: DF.Link
-		evaluator: DF.Link
+		evaluator: DF.DynamicLink
+		evaluator_type: DF.Link | None
+		rubric: DF.SmallText | None
+		score: DF.Table[CAPEvalScore]
 	# end: auto-generated types
 
 	def autoname(self):
