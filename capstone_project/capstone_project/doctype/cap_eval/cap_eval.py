@@ -29,7 +29,7 @@ class CAPEval(Document):
 		evaluator: DF.DynamicLink
 		evaluator_type: DF.Link | None
 		rubric: DF.SmallText | None
-		score: DF.Table[CAPEvalScore]
+		scores: DF.Table[CAPEvalScore]
 	# end: auto-generated types
 
 	def autoname(self):
@@ -81,7 +81,12 @@ class CAPEval(Document):
 		found_clo = False
 		for clo in course_ci.clo_table:
 			if clo.clo_number == self.clo_number:
-				self.clo_description = clo.description_en
+				# Construct the CLO description text with both English and Thai descriptions
+				des_en = clo.description_en
+				des_th = clo.description_th
+				des_text = f"English: {des_en}\nThai: {des_th}"
+				# Set the clo_description field in the CAP Eval document
+				self.clo_description = des_text
 				found_clo = True
 				break
 		if not found_clo:
@@ -92,7 +97,15 @@ class CAPEval(Document):
 		found_rubric = False
 		for rubric in course_ci.rubric_table:
 			if rubric.clo_number == self.clo_number:
-				self.rubric = rubric.rubric
+				# Construct the rubric text with scores and descriptions
+				d0 = rubric.description_score_0
+				d1 = rubric.description_score_1
+				d2 = rubric.description_score_2
+				d3 = rubric.description_score_3
+				d4 = rubric.description_score_4
+				rubric_text = f"Score 0: {d0}\nScore 1: {d1}\nScore 2: {d2}\nScore 3: {d3}\nScore 4: {d4}"
+				# Set the rubric field in the CAP Eval document
+				self.rubric = rubric_text
 				found_rubric = True
 				break
 		if not found_rubric:
@@ -100,5 +113,40 @@ class CAPEval(Document):
 				f"Rubric for CLO number '{self.clo_number}' not found in the selected EDU Course CI document."
 			)
 
+	def fill_recipient_info(self):
+		if self.scores:
+			for score in self.scores:
+				if score.recipient_type == "CAP Group":
+					# Get the CAP Group document based on the recipient field
+					cap_group = frappe.get_doc("CAP Group", score.recipient_type_dynamic)
+					# Fill in the recipient information fields in the CAP Eval Score document
+					group_number = cap_group.group_number
+					group_nickname = cap_group.group_nickname if cap_group.group_nickname else ""
+					info = f"G{group_number} - {group_nickname}" if group_nickname else f"G{group_number}"
+					score.recipient_information = info
+				elif score.recipient_type == "EDU Student":
+					# Get the EDU Student document based on the recipient field
+					edu_student = frappe.get_doc("EDU Student", score.recipient_type_dynamic)
+					# Fill in the recipient information fields in the CAP Eval Score document
+					firstname_th = edu_student.firstname_th if edu_student.firstname_th else ""
+					lastname_th = edu_student.lastname_th if edu_student.lastname_th else ""
+					firstname_en = edu_student.firstname_en if edu_student.firstname_en else ""
+					lastname_en = edu_student.lastname_en if edu_student.lastname_en else ""
+					full_name_th = f"{firstname_th} {lastname_th}".strip()
+					full_name_en = f"{firstname_en} {lastname_en}".strip()
+					if full_name_th and full_name_en:
+						info = f"{full_name_th} / {full_name_en}"
+					elif full_name_th:
+						info = full_name_th
+					elif full_name_en:
+						info = full_name_en
+					else:
+						info = ""
+					score.recipient_information = info
+				else:
+					frappe.throw(f"Unknown recipient type: {score.recipient_type}")
+				pass
+
 	def before_save(self):
 		self.pull_clo_info()
+		self.fill_recipient_info()

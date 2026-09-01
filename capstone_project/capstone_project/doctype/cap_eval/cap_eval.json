@@ -21,7 +21,7 @@
   "clo_number",
   "clo_description",
   "rubric",
-  "score"
+  "scores"
  ],
  "fields": [
   {
@@ -76,12 +76,6 @@
    "options": "CAP Eval List"
   },
   {
-   "fieldname": "score",
-   "fieldtype": "Table",
-   "label": "Score",
-   "options": "CAP Eval Score"
-  },
-  {
    "fieldname": "rubric",
    "fieldtype": "Small Text",
    "label": "Rubric",
@@ -123,13 +117,19 @@
    "fieldtype": "Link",
    "label": "Capstone Course",
    "options": "EDU Course"
+  },
+  {
+   "fieldname": "scores",
+   "fieldtype": "Table",
+   "label": "Scores",
+   "options": "CAP Eval Score"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-01 15:13:35.608624",
+ "modified": "2026-09-01 20:01:37.287249",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",

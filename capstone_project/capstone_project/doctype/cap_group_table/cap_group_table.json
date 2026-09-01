@@ -32,14 +32,14 @@
    "fieldname": "lastname_th",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Lastnae (TH)"
+   "label": "Lastname (TH)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-08-30 17:02:05.329645",
+ "modified": "2026-09-01 19:34:14.369185",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Group Table",

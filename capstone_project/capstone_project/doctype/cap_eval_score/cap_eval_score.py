@@ -17,8 +17,9 @@ class CAPEvalScore(Document):
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
-		party_type: DF.Link | None
-		party_type_dynamic: DF.DynamicLink | None
+		recipient_information: DF.Data | None
+		recipient_type: DF.Link | None
+		recipient_type_dynamic: DF.DynamicLink | None
 		score_raw: DF.Float
 		score_scaled: DF.Float
 	# end: auto-generated types

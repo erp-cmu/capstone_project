@@ -6,20 +6,19 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_bxox",
+  "general_information_section",
   "amended_from",
   "curriculum",
   "evaluation_year",
-  "group_name",
+  "column_break_rjqd",
+  "group_number",
+  "group_nickname",
   "advisor",
   "coadvisor",
+  "people_section",
   "members"
  ],
  "fields": [
-  {
-   "fieldname": "section_break_bxox",
-   "fieldtype": "Section Break"
-  },
   {
    "fieldname": "amended_from",
    "fieldtype": "Link",
@@ -51,13 +50,6 @@
    "options": "CAP Group Table"
   },
   {
-   "fieldname": "group_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Group Name",
-   "reqd": 1
-  },
-  {
    "fieldname": "advisor",
    "fieldtype": "Link",
    "label": "Advisor",
@@ -68,13 +60,39 @@
    "fieldtype": "Link",
    "label": "Co-Advisor",
    "options": "Employee"
+  },
+  {
+   "fieldname": "group_number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Group Number",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_rjqd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "general_information_section",
+   "fieldtype": "Section Break",
+   "label": "General Information"
+  },
+  {
+   "fieldname": "people_section",
+   "fieldtype": "Section Break",
+   "label": "People"
+  },
+  {
+   "fieldname": "group_nickname",
+   "fieldtype": "Data",
+   "label": "Group (Nick) Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-08-30 17:10:40.146975",
+ "modified": "2026-09-01 19:59:16.808316",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Group",
@@ -89,13 +107,14 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "select": 1,
    "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "group_number,group_nickname",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
