@@ -19,7 +19,7 @@ class CAPEval(Document):
 		from frappe.types import DF
 
 		amended_from: DF.Link | None
-		capstone_course: DF.Link | None
+		capstone_course: DF.Link
 		clo_description: DF.SmallText | None
 		clo_number: DF.Int
 		curriculum: DF.Link
@@ -27,8 +27,8 @@ class CAPEval(Document):
 		evaluation_round: DF.Literal["Proposal", "Progressive", "Final"]
 		evaluation_year: DF.Link
 		evaluator: DF.DynamicLink
-		evaluator_name: DF.Data | None
-		evaluator_type: DF.Link | None
+		evaluator_name: DF.Data
+		evaluator_type: DF.Link
 		rubric: DF.SmallText | None
 		scaling_method: DF.Literal["Threshold", "Linear"]
 		score_max: DF.Float
@@ -211,15 +211,17 @@ class CAPEval(Document):
 	def before_save(self):
 		self.pull_clo_info()
 		self.fill_recipient_info()
-		check_scaling_consistency(
-			self.scaling_method,
-			self.score_max,
-			self.score_min,
-			self.threshold_1,
-			self.threshold_2,
-			self.threshold_3,
-			self.threshold_4,
-		)
+		# Skip validation when the doctype is created without score_max and score_min, as they may be set later
+		if self.score_max is not None or self.score_min is not None:
+			check_scaling_consistency(
+				self.scaling_method,
+				self.score_max,
+				self.score_min,
+				self.threshold_1,
+				self.threshold_2,
+				self.threshold_3,
+				self.threshold_4,
+			)
 		self.scale_score()
 		self.set_evaluator_name()
 
@@ -227,6 +229,8 @@ class CAPEval(Document):
 def check_scaling_consistency(
 	scaling_method, score_max, score_min, threshold_1, threshold_2, threshold_3, threshold_4
 ):
+	if score_max is None or score_min is None:
+		frappe.throw("score_max and score_min must be provided.")
 	# Validate that score_min is less than score_max
 	if score_min >= score_max:
 		frappe.throw("score_min must be less than score_max.")

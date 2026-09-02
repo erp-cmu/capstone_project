@@ -24,6 +24,18 @@
    "icon": "list",
    "indent": 0,
    "keep_closed": 0,
+   "label": "Course CI",
+   "link_to": "EDU Course CI",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list",
+   "indent": 0,
+   "keep_closed": 0,
    "label": "Group",
    "link_to": "CAP Group",
    "link_type": "DocType",
@@ -41,9 +53,21 @@
    "link_type": "DocType",
    "show_arrow": 0,
    "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Score Scaling",
+   "link_to": "EDU Score Scaling",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-09-02 12:54:27.971359",
+ "modified": "2026-09-02 19:41:31.108901",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "IE Capstone",
