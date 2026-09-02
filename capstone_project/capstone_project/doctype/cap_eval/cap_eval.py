@@ -27,10 +27,31 @@ class CAPEval(Document):
 		evaluation_round: DF.Literal["Proposal", "Progressive", "Final"]
 		evaluation_year: DF.Link
 		evaluator: DF.DynamicLink
+		evaluator_name: DF.Data | None
 		evaluator_type: DF.Link | None
 		rubric: DF.SmallText | None
+		scaling_method: DF.Literal["Threshold", "Linear"]
+		score_max: DF.Float
+		score_min: DF.Float
+		score_scaling_template: DF.Link | None
 		scores: DF.Table[CAPEvalScore]
+		threshold_1: DF.Float
+		threshold_2: DF.Float
+		threshold_3: DF.Float
+		threshold_4: DF.Float
 	# end: auto-generated types
+
+	def set_evaluator_name(self):
+		if self.evaluator_type == "Employee":
+			# Get employee full name from the Employee doctype
+			firstname = frappe.get_value("Employee", self.evaluator, "first_name")
+			if firstname:
+				self.evaluator_name = firstname
+			else:
+				frappe.throw(f"First name not found in employee {self.evaluator}")
+		else:
+			# TODO: Handle other evaluator types if needed
+			frappe.throw("Please use Employee as evaluator type for now. Other types are not supported yet.")
 
 	def autoname(self):
 		if self.evaluator_type == "Employee":
@@ -81,10 +102,18 @@ class CAPEval(Document):
 		found_clo = False
 		for clo in course_ci.clo_table:
 			if clo.clo_number == self.clo_number:
+				clo_number = clo.clo_number
 				# Construct the CLO description text with both English and Thai descriptions
 				des_en = clo.description_en
 				des_th = clo.description_th
-				des_text = f"English: {des_en}\nThai: {des_th}"
+				if des_th and not des_en:
+					des_text = f"CLO {clo_number}\n{des_th}"
+				elif des_en and not des_th:
+					des_text = f"CLO {clo_number}\n{des_en}"
+				elif des_en and des_th:
+					des_text = f"CLO {clo_number}\nEnglish: {des_en}\nThai: {des_th}"
+				else:
+					des_text = f"CLO {clo_number}\nNo description available."
 				# Set the clo_description field in the CAP Eval document
 				self.clo_description = des_text
 				found_clo = True
@@ -147,6 +176,81 @@ class CAPEval(Document):
 					frappe.throw(f"Unknown recipient type: {score.recipient_type}")
 				pass
 
+	def scale_score(self):
+		if self.scores:
+			for score in self.scores:
+				if self.scaling_method == "Threshold":
+					if score.score_raw is not None:
+						if score.score_raw < self.threshold_1:
+							score.score_scaled = 0
+						elif self.threshold_1 <= score.score_raw < self.threshold_2:
+							score.score_scaled = 1
+						elif self.threshold_2 <= score.score_raw < self.threshold_3:
+							score.score_scaled = 2
+						elif self.threshold_3 <= score.score_raw < self.threshold_4:
+							score.score_scaled = 3
+						elif score.score_raw >= self.threshold_4:
+							score.score_scaled = 4
+						else:
+							score.score_scaled = None
+					else:
+						score.score_scaled = None
+				elif self.scaling_method == "Linear":
+					if score.score_raw is not None and self.score_max != self.score_min:
+						# Scale the score linearly to a range of 0 to 4
+						scaled_value = (
+							(score.score_raw - self.score_min) / (self.score_max - self.score_min) * 4
+						)
+						# Round the scaled value to the nearest integer and ensure it's within the range [0, 4]
+						score.score_scaled = max(0, min(4, round(scaled_value)))
+					else:
+						score.score_scaled = None
+				else:
+					frappe.throw(f"Unknown scaling method: {self.scaling_method}")
+
 	def before_save(self):
 		self.pull_clo_info()
 		self.fill_recipient_info()
+		check_scaling_consistency(
+			self.scaling_method,
+			self.score_max,
+			self.score_min,
+			self.threshold_1,
+			self.threshold_2,
+			self.threshold_3,
+			self.threshold_4,
+		)
+		self.scale_score()
+		self.set_evaluator_name()
+
+
+def check_scaling_consistency(
+	scaling_method, score_max, score_min, threshold_1, threshold_2, threshold_3, threshold_4
+):
+	# Validate that score_min is less than score_max
+	if score_min >= score_max:
+		frappe.throw("score_min must be less than score_max.")
+
+	# Validate that threshold values are in ascending order if scaling_method is "Threshold"
+	if scaling_method == "Threshold":
+		if not all(
+			[
+				threshold_1 is not None,
+				threshold_2 is not None,
+				threshold_3 is not None,
+				threshold_4 is not None,
+			]
+		):
+			frappe.throw("All threshold values must be provided for Threshold scaling method.")
+
+		if threshold_4 <= threshold_3 or threshold_3 <= threshold_2 or threshold_2 <= threshold_1:
+			frappe.throw(
+				"Threshold values must be in ascending order: threshold_1 < threshold_2 < threshold_3 < threshold_4."
+			)
+	elif scaling_method == "Linear":
+		threshold_1 = 0.0
+		threshold_2 = 0.0
+		threshold_3 = 0.0
+		threshold_4 = 0.0
+	else:
+		frappe.throw("Unknown scaling method.")

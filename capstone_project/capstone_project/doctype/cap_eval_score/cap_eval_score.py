@@ -14,12 +14,13 @@ class CAPEvalScore(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		comment: DF.SmallText | None
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
 		recipient_information: DF.Data | None
-		recipient_type: DF.Link | None
-		recipient_type_dynamic: DF.DynamicLink | None
+		recipient_type: DF.Link
+		recipient_type_dynamic: DF.DynamicLink
 		score_raw: DF.Float
 		score_scaled: DF.Float
 	# end: auto-generated types

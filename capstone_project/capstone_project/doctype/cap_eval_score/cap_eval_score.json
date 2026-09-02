@@ -11,7 +11,8 @@
   "recipient_type_dynamic",
   "recipient_information",
   "score_raw",
-  "score_scaled"
+  "score_scaled",
+  "comment"
  ],
  "fields": [
   {
@@ -32,14 +33,16 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Recipient Type",
-   "options": "DocType"
+   "options": "DocType",
+   "reqd": 1
   },
   {
    "fieldname": "recipient_type_dynamic",
    "fieldtype": "Dynamic Link",
    "in_list_view": 1,
    "label": "Recipient",
-   "options": "recipient_type"
+   "options": "recipient_type",
+   "reqd": 1
   },
   {
    "fieldname": "recipient_information",
@@ -47,13 +50,19 @@
    "in_list_view": 1,
    "label": "Recipient Information",
    "read_only": 1
+  },
+  {
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Comment"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-09-01 19:26:13.990993",
+ "modified": "2026-09-02 17:52:32.510374",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval Score",

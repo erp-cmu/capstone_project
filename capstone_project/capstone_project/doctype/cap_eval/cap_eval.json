@@ -14,14 +14,26 @@
   "capstone_course",
   "evaluator_type",
   "evaluator",
+  "evaluator_name",
   "amended_from",
   "evaluation_section",
-  "evaluation_list",
-  "scores_section",
   "clo_number",
+  "evaluation_list",
+  "scores_tab",
+  "input_section",
   "clo_description",
   "rubric",
-  "scores"
+  "scores",
+  "score_scaling_section",
+  "score_scaling_template",
+  "scaling_method",
+  "score_max",
+  "score_min",
+  "column_break_qvkd",
+  "threshold_4",
+  "threshold_3",
+  "threshold_2",
+  "threshold_1"
  ],
  "fields": [
   {
@@ -52,6 +64,8 @@
   {
    "fieldname": "evaluation_round",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Evaluation Round",
    "options": "Proposal\nProgressive\nFinal",
    "reqd": 1
@@ -96,11 +110,6 @@
    "label": "Evaluation"
   },
   {
-   "fieldname": "scores_section",
-   "fieldtype": "Section Break",
-   "label": "Scores"
-  },
-  {
    "fieldname": "evaluator_type",
    "fieldtype": "Link",
    "label": "Evaluator Type",
@@ -123,13 +132,89 @@
    "fieldtype": "Table",
    "label": "Scores",
    "options": "CAP Eval Score"
+  },
+  {
+   "fieldname": "scores_tab",
+   "fieldtype": "Tab Break",
+   "label": "Scores"
+  },
+  {
+   "fieldname": "input_section",
+   "fieldtype": "Section Break",
+   "label": "Score Input"
+  },
+  {
+   "fieldname": "score_scaling_section",
+   "fieldtype": "Section Break",
+   "label": "Scaling Option"
+  },
+  {
+   "fetch_from": "score_scaling_template.score_max",
+   "fieldname": "score_max",
+   "fieldtype": "Float",
+   "label": "Max Score"
+  },
+  {
+   "fetch_from": "score_scaling_template.score_min",
+   "fieldname": "score_min",
+   "fieldtype": "Float",
+   "label": "Min Score"
+  },
+  {
+   "fieldname": "column_break_qvkd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "score_scaling_template.threshold_4",
+   "fieldname": "threshold_4",
+   "fieldtype": "Float",
+   "label": "Threshold for 4"
+  },
+  {
+   "fetch_from": "score_scaling_template.threshold_3",
+   "fieldname": "threshold_3",
+   "fieldtype": "Float",
+   "label": "Threshold for 3"
+  },
+  {
+   "fetch_from": "score_scaling_template.threshold_2",
+   "fieldname": "threshold_2",
+   "fieldtype": "Float",
+   "label": "Threshold for 2"
+  },
+  {
+   "fetch_from": "score_scaling_template.threshold_1",
+   "fieldname": "threshold_1",
+   "fieldtype": "Float",
+   "label": "Threshold for 1"
+  },
+  {
+   "fetch_from": "score_scaling_template.scaling_method",
+   "fieldname": "scaling_method",
+   "fieldtype": "Select",
+   "label": "Scaling Method",
+   "options": "Threshold\nLinear"
+  },
+  {
+   "fieldname": "score_scaling_template",
+   "fieldtype": "Link",
+   "label": "Score Scaling Template",
+   "options": "EDU Score Scaling"
+  },
+  {
+   "fieldname": "evaluator_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Evaluator Name",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-01 20:01:37.287249",
+ "modified": "2026-09-02 19:18:48.222804",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",
