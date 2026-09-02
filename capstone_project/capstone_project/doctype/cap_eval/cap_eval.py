@@ -27,7 +27,7 @@ class CAPEval(Document):
 		evaluation_round: DF.Literal["Proposal", "Progressive", "Final"]
 		evaluation_year: DF.Link
 		evaluator: DF.DynamicLink
-		evaluator_name: DF.Data
+		evaluator_name: DF.Data | None
 		evaluator_type: DF.Link
 		rubric: DF.SmallText | None
 		scaling_method: DF.Literal["Threshold", "Linear"]
