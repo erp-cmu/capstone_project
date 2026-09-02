@@ -1,0 +1,53 @@
+{
+ "app": "capstone_project",
+ "creation": "2026-09-02 12:44:05.988449",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "blocks",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Evaluation",
+   "link_to": "CAP Eval",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Group",
+   "link_to": "CAP Group",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Student",
+   "link_to": "EDU Student",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-02 12:54:27.971359",
+ "modified_by": "Administrator",
+ "module": "Capstone Project",
+ "name": "IE Capstone",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "IE Capstone"
+}
