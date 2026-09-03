@@ -23,6 +23,8 @@ class CAPGroup(Document):
 		group_nickname: DF.Data | None
 		group_number: DF.Int
 		members: DF.Table[CAPGroupTable]
+		project_title_en: DF.SmallText | None
+		project_title_th: DF.SmallText | None
 	# end: auto-generated types
 
 	def autoname(self):

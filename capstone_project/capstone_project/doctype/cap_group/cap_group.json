@@ -15,6 +15,9 @@
   "group_nickname",
   "advisor",
   "coadvisor",
+  "project_section",
+  "project_title_th",
+  "project_title_en",
   "people_section",
   "members"
  ],
@@ -87,12 +90,27 @@
    "fieldname": "group_nickname",
    "fieldtype": "Data",
    "label": "Group (Nick) Name"
+  },
+  {
+   "fieldname": "project_section",
+   "fieldtype": "Section Break",
+   "label": "Project"
+  },
+  {
+   "fieldname": "project_title_th",
+   "fieldtype": "Small Text",
+   "label": "Project Title (TH)"
+  },
+  {
+   "fieldname": "project_title_en",
+   "fieldtype": "Small Text",
+   "label": "Project Title (EN)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-01 19:59:16.808316",
+ "modified": "2026-09-03 12:24:42.336051",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Group",

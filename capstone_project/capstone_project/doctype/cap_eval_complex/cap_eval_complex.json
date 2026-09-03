@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-09-03 12:26:23.431591",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "general_information_section",
+  "evaluator_type",
+  "evaluator",
+  "evaluator_name",
+  "amended_from",
+  "column_break_ydiu",
+  "group",
+  "title",
+  "evaluation_section",
+  "criteria_1"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "CAP Eval Complex",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_ydiu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "evaluator_type",
+   "fieldtype": "Link",
+   "label": "Evaluator Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "evaluator",
+   "fieldtype": "Dynamic Link",
+   "label": "Evaluator",
+   "options": "evaluator_type"
+  },
+  {
+   "fieldname": "evaluator_name",
+   "fieldtype": "Data",
+   "label": "Evaluator Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "general_information_section",
+   "fieldtype": "Section Break",
+   "label": "General Information"
+  },
+  {
+   "fieldname": "group",
+   "fieldtype": "Link",
+   "label": "Group",
+   "options": "CAP Group"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Small Text",
+   "label": "Title"
+  },
+  {
+   "fieldname": "criteria_1",
+   "fieldtype": "Rating",
+   "label": "Criteria 1"
+  },
+  {
+   "fieldname": "evaluation_section",
+   "fieldtype": "Section Break",
+   "label": "Evaluation"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-03 12:42:06.010921",
+ "modified_by": "Administrator",
+ "module": "Capstone Project",
+ "name": "CAP Eval Complex",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
