@@ -196,7 +196,7 @@
    "fieldname": "scaling_method",
    "fieldtype": "Select",
    "label": "Scaling Method",
-   "options": "Threshold\nLinear"
+   "options": "Linear\nThreshold"
   },
   {
    "fieldname": "score_scaling_template",
@@ -217,7 +217,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-02 21:29:52.938620",
+ "modified": "2026-09-03 09:11:10.363002",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval",

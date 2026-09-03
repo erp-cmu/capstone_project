@@ -14,7 +14,7 @@ class CAPEvalList(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		evaluation_type: DF.Literal["Individual", "Group"]
+		evaluation_type: DF.Literal["Group", "Individual"]
 		group: DF.Link | None
 		parent: DF.Data
 		parentfield: DF.Data

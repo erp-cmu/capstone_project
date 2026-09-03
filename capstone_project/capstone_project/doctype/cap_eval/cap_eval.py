@@ -30,7 +30,7 @@ class CAPEval(Document):
 		evaluator_name: DF.Data | None
 		evaluator_type: DF.Link
 		rubric: DF.SmallText | None
-		scaling_method: DF.Literal["Threshold", "Linear"]
+		scaling_method: DF.Literal["Linear", "Threshold"]
 		score_max: DF.Float
 		score_min: DF.Float
 		score_scaling_template: DF.Link | None
@@ -201,8 +201,8 @@ class CAPEval(Document):
 						scaled_value = (
 							(score.score_raw - self.score_min) / (self.score_max - self.score_min) * 4
 						)
-						# Round the scaled value to the nearest integer and ensure it's within the range [0, 4]
-						score.score_scaled = max(0, min(4, round(scaled_value)))
+						# Ensure the value is within the range [0, 4]
+						score.score_scaled = max(0, min(4, scaled_value))
 					else:
 						score.score_scaled = None
 				else:
@@ -222,7 +222,7 @@ class CAPEval(Document):
 				self.threshold_3,
 				self.threshold_4,
 			)
-		self.scale_score()
+			self.scale_score()
 		self.set_evaluator_name()
 
 

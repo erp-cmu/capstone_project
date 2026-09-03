@@ -16,7 +16,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Evaluation Type",
-   "options": "Individual\nGroup"
+   "options": "Group\nIndividual"
   },
   {
    "fieldname": "group",
@@ -30,7 +30,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-09-01 08:27:56.334953",
+ "modified": "2026-09-03 09:10:23.315123",
  "modified_by": "Administrator",
  "module": "Capstone Project",
  "name": "CAP Eval List",
