@@ -36,7 +36,7 @@ export const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to, _from) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated; // returns boolean
 
@@ -44,11 +44,11 @@ router.beforeEach((to, _from, next) => {
   console.log('Checking authentication for route:', to.fullPath);
   if (to.meta.requiresAuth && !isAuthenticated) {
     // Redirect to login page and save the intended target route
-    return next({ name: 'login', query: { redirect: to.fullPath } });
+    return { name: 'login', query: { redirect: to.fullPath } };
+  } else {
+    // Otherwise, allow navigation
+    return;
   }
-
-  // Otherwise, allow navigation
-  next();
 });
 
 const pinia = createPinia();
