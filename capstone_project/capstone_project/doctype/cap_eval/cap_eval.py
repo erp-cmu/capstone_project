@@ -260,9 +260,24 @@ def check_scaling_consistency(
 		frappe.throw("Unknown scaling method.")
 
 
-@frappe.whitelist(allow_guest=False)
+@frappe.whitelist(allow_guest=True)
 def get_eval_data():
-	return frappe.get_list(
-		"CAP Eval", filters={}, fields=["*"], order_by="creation desc", limit=20, ignore_permissions=True
+	eval_list = frappe.get_all(
+		"CAP Eval",
+		filters={},
+		fields=["*"],
+		order_by="creation desc",
+		limit=20,
+		ignore_permissions=True,
 	)
+
+	for eval_item in eval_list:
+		eval_item["scores"] = frappe.get_all(
+			"CAP Eval Score",
+			filters={"parent": eval_item.name},
+			fields=["*"],
+			order_by="creation desc",
+			ignore_permissions=True,
+		)
+	return eval_list
 	# return "Test"
