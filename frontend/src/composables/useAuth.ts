@@ -1,19 +1,22 @@
 import { router } from '@/main';
+import { type User } from '@/types/user';
 import { useQuery, useQueryClient } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
 import { computed, ref } from 'vue';
 
 export const checkLoginStatus = async () => {
   try {
-    const username: string = await call('frappe.auth.get_logged_user');
+    const user: User = await call(
+      'capstone_project.utils.auth.get_current_user_info',
+    );
     return {
       isAuthenticated: true,
-      username: username,
+      user: user,
     };
   } catch (error) {
     return {
       isAuthenticated: false,
-      username: '',
+      user: null,
     };
   }
 };
@@ -31,7 +34,7 @@ export function useAuth() {
   const isAuthenticated = computed(
     () => authStatusQuery.data.value?.isAuthenticated ?? false,
   );
-  const username = computed(() => authStatusQuery.data.value?.username ?? '');
+  const user = computed(() => authStatusQuery.data.value?.user ?? null);
 
   async function login(username: string, password: string) {
     try {
@@ -59,7 +62,7 @@ export function useAuth() {
 
   return {
     isAuthenticated,
-    username,
+    user,
     login,
     logout,
     loginError,

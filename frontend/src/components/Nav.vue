@@ -2,7 +2,7 @@
 import { useAuth } from '@/composables/useAuth';
 import { FeatherIcon } from 'frappe-ui';
 
-const { logout, isAuthenticated, username } = useAuth();
+const { logout, isAuthenticated, user } = useAuth();
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const { logout, isAuthenticated, username } = useAuth();
 
 			<div class="flex items-center gap-3">
 				<div v-if="isAuthenticated" class="flex items-center gap-3">
-					<div>{{ username }}</div>
+					<div>{{ user?.username }}</div>
 					<RouterLink to="/" @click="logout">Log out</RouterLink>
 				</div>
 				<div v-else>

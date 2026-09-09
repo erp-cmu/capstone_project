@@ -1,0 +1,63 @@
+export interface Eval {
+  eval_name: string;
+  eval_owner: string;
+  eval_creation: string;
+  eval_modified: string;
+  eval_modified_by: string;
+  eval_docstatus: number;
+  eval_idx: number;
+  eval_curriculum: string;
+  eval_evaluation_year: string;
+  eval_evaluation_round: string;
+  eval_capstone_course: string;
+  eval_evaluator_type: string;
+  eval_evaluator: string;
+  eval_evaluator_name: string;
+  eval_amended_from: null;
+  eval_clo_number: number;
+  eval_clo_description: string;
+  eval_rubric: string;
+  eval_score_scaling_template: string;
+  eval_scaling_method: string;
+  eval_score_max: number;
+  eval_score_min: number;
+  eval_threshold_4: number;
+  eval_threshold_3: number;
+  eval_threshold_2: number;
+  eval_threshold_1: number;
+  eval_doctype: string;
+  eval_evaluation_list: EvalEvaluationList[];
+  score_name: string;
+  score_owner: string;
+  score_creation: string;
+  score_modified: string;
+  score_modified_by: string;
+  score_docstatus: number;
+  score_idx: number;
+  score_recipient_type: string;
+  score_recipient_type_dynamic: string;
+  score_recipient_information: string;
+  score_score_raw: number;
+  score_score_scaled: number;
+  score_comment: null;
+  score_parent: string;
+  score_parentfield: string;
+  score_parenttype: string;
+  score_doctype: string;
+}
+
+export interface EvalEvaluationList {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  group: string;
+  evaluation_type: string;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}

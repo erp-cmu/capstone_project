@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import re
+from sys import prefix
 
 import frappe
 from frappe.model.document import Document
@@ -262,22 +263,31 @@ def check_scaling_consistency(
 
 @frappe.whitelist(allow_guest=True)
 def get_eval_data():
-	eval_list = frappe.get_all(
+	eval_names = frappe.get_all(
 		"CAP Eval",
 		filters={},
-		fields=["*"],
+		fields=["name"],
 		order_by="creation desc",
-		limit=20,
+		limit=10000,
 		ignore_permissions=True,
 	)
 
-	for eval_item in eval_list:
-		eval_item["scores"] = frappe.get_all(
-			"CAP Eval Score",
-			filters={"parent": eval_item.name},
-			fields=["*"],
-			order_by="creation desc",
-			ignore_permissions=True,
-		)
-	return eval_list
-	# return "Test"
+	evals = []
+	for _eval in eval_names:
+		_doc = frappe.get_doc("CAP Eval", _eval.name)
+		evals.append(_doc)
+
+	# Flatten
+	evals_scores = []
+	for _eval in evals:
+		_eval_dict = _eval.as_dict()
+		del _eval_dict["scores"]
+		_eval_dict = {f"eval_{k}": v for k, v in _eval_dict.items()}
+
+		for _score in _eval.scores:
+			_score_dict = _score.as_dict()
+			_score_dict = {f"score_{k}": v for k, v in _score_dict.items()}
+			_eval_dict.update(_score_dict)
+			evals_scores.append(_eval_dict)
+
+	return evals_scores

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useEval } from '@/composables/useEval';
 
-const evals = useEval();
-console.log(evals);
+const { data } = useEval();
+console.log(data);
 </script>
 
 <template>
 	Evaluation
 
-	<div v-if="evals?.data" v-for="el in evals.data" :key="el.name">
-		{{ el.name }}
+	<div v-if="data" v-for="el in data" :key="el.eval_name">
+		{{ el.eval_name }} {{ el.eval_evaluator_name }}
 	</div>
 </template>
