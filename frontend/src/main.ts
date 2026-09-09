@@ -1,4 +1,5 @@
-import { useAuthStore } from '@/lib/store';
+import { checkLoginStatus } from '@/composables/useAuth';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -6,9 +7,17 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import './style.css';
 
 import App from '@/App.vue';
-import AboutView from '@/pages/About.vue';
+import EvauationView from '@/pages/Evaluation.vue';
 import HomeView from '@/pages/Home.vue';
 import LoginView from '@/pages/Login.vue';
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+});
 
 const routes = [
   {
@@ -18,9 +27,9 @@ const routes = [
     meta: { requiresAuth: false },
   },
   {
-    path: '/about',
-    component: AboutView,
-    name: 'about',
+    path: '/evaluation',
+    component: EvauationView,
+    name: 'evaluation',
     meta: { requiresAuth: true },
   },
   {
@@ -36,12 +45,14 @@ export const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, _from) => {
-  const authStore = useAuthStore();
-  const isAuthenticated = authStore.isAuthenticated; // returns boolean
-
+router.beforeEach(async (to, _from) => {
+  const { isAuthenticated } = await queryClient.query({
+    queryKey: ['authStatus'],
+    queryFn: checkLoginStatus,
+  });
   // Route requires auth, but user is NOT logged in
-  console.log('Checking authentication for route:', to.fullPath);
+  // console.log('Checking authentication for route:', to.fullPath);
+  // console.log('User is authenticated:', isAuthenticated);
   if (to.meta.requiresAuth && !isAuthenticated) {
     // Redirect to login page and save the intended target route
     return { name: 'login', query: { redirect: to.fullPath } };
@@ -53,4 +64,8 @@ router.beforeEach((to, _from) => {
 
 const pinia = createPinia();
 
-createApp(App).use(router).use(pinia).mount('#app');
+createApp(App)
+  .use(pinia)
+  .use(VueQueryPlugin, { queryClient })
+  .use(router)
+  .mount('#app');

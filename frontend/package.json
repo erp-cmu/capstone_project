@@ -10,6 +10,7 @@
     "copy-html-entry": "cp ../capstone_project/public/frontend/index.html ../capstone_project/www/capstone.html"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.102.8",
     "debug": "^4.4.3",
     "frappe-ui": "^0.1.278",
     "highlight.js": "^11.12.0",

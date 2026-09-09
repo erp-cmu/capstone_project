@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
 import { FeatherIcon } from 'frappe-ui';
+
+const { logout, isAuthenticated, username } = useAuth();
 </script>
 
 <template>
@@ -13,11 +16,19 @@ import { FeatherIcon } from 'frappe-ui';
 				</div>
 			</RouterLink>
 
-			<div class="hidden items-center gap-3 md:flex">
-				<RouterLink to="/about"> About </RouterLink>
+			<div class="flex items-center gap-3">
+				<RouterLink to="/evaluation">Evaluation</RouterLink>
 			</div>
 
-			<RouterLink to="/login"> Sign in </RouterLink>
+			<div class="flex items-center gap-3">
+				<div v-if="isAuthenticated" class="flex items-center gap-3">
+					<div>{{ username }}</div>
+					<RouterLink to="/" @click="logout">Log out</RouterLink>
+				</div>
+				<div v-else>
+					<RouterLink to="/login">Log in</RouterLink>
+				</div>
+			</div>
 		</div>
 	</nav>
 </template>

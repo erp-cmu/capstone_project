@@ -11,11 +11,13 @@ export default defineConfig({
     frappeui({
       lucideIcons: true,
       frontendRoute: '/capstone',
+      frappeProxy: {
+        port: 8081,
+      },
     }),
     vue(),
   ],
   server: {
-    port: 8081,
     proxy: getProxyOptions(),
     allowedHosts: true,
   },

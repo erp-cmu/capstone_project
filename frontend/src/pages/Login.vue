@@ -1,39 +1,32 @@
 <script lang="ts" setup>
-import { useAuthStore } from '@/lib/store';
-import { call } from 'frappe-ui';
+import { useAuth } from '@/composables/useAuth';
+import { Button, FormControl } from 'frappe-ui';
 import { ref } from 'vue';
 
 const username = ref('');
 const password = ref('');
-
-async function login(username: string, password: string) {
-	try {
-		const response = await call('login', {
-			usr: username,
-			pwd: password,
-		});
-		const authStore = useAuthStore();
-		authStore.isAuthenticated = true;
-		console.log('Authentication successful', response);
-	} catch (error) {
-		console.error('Authentication failed', error);
-	}
-}
+const { login, loginError } = useAuth();
 </script>
 
 <template>
-	<div class="login-container">
-		<h1>Login</h1>
-		<form @submit.prevent="login(username, password)">
-			<div class="form-group">
-				<label for="username">Username:</label>
-				<input type="text" id="username" v-model="username" required />
-			</div>
-			<div class="form-group">
-				<label for="password">Password:</label>
-				<input type="password" id="password" v-model="password" required />
-			</div>
-			<button type="submit">Login</button>
-		</form>
-	</div>
+	<form @submit.prevent="login(username, password)" class="space-y-4 py-4">
+		<h2>Login</h2>
+		<FormControl
+			type="text"
+			label="Username"
+			placeholder="Enter your username"
+			v-model="username"
+			required
+		/>
+		<FormControl
+			type="password"
+			label="Password"
+			placeholder="Enter your password"
+			v-model="password"
+			required
+		/>
+		<div v-if="loginError" class="text-red-500 text-sm mt-1">{{ loginError }}</div>
+
+		<Button variant="solid" type="submit">Login</Button>
+	</form>
 </template>
