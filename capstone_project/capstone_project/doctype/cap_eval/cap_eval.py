@@ -258,3 +258,11 @@ def check_scaling_consistency(
 		threshold_4 = 0.0
 	else:
 		frappe.throw("Unknown scaling method.")
+
+
+@frappe.whitelist(allow_guest=False)
+def get_eval_data():
+	return frappe.get_list(
+		"CAP Eval", filters={}, fields=["*"], order_by="creation desc", limit=20, ignore_permissions=True
+	)
+	# return "Test"
