@@ -261,11 +261,19 @@ def check_scaling_consistency(
 		frappe.throw("Unknown scaling method.")
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False, methods=["POST"])
 def get_eval_data():
+
+	employee_name = frappe.form_dict.get("employee_name", "")
+
+	if employee_name == "":
+		filters = {}
+	else:
+		filters = {"evaluator": employee_name}
+
 	eval_names = frappe.get_all(
 		"CAP Eval",
-		filters={},
+		filters=filters,
 		fields=["name"],
 		order_by="creation desc",
 		limit=10000,
