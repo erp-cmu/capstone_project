@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEval } from '@/composables/useEval';
 
-const { data } = useEval();
+const { data, dataGrouped } = useEval();
 console.log(data);
 </script>
 

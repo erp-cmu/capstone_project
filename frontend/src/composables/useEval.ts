@@ -2,6 +2,8 @@ import { useAuth } from '@/composables/useAuth';
 import { type Eval } from '@/types/eval';
 import { useQuery } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
+import { groupBy } from 'lodash-es';
+import { computed } from 'vue';
 
 async function getEvals(employeeName: string) {
   try {
@@ -26,8 +28,17 @@ export function useEval() {
     enabled: isAuthenticated,
   });
 
+  const dataGrouped = computed(() => {
+    return groupBy(
+      evalQuery.data.value,
+      (ev: Eval) =>
+        `${ev.score_recipient_type} - ${ev.score_recipient_type_dynamic}`,
+    );
+  });
+
   return {
     data: evalQuery.data,
+    dataGrouped: dataGrouped,
     query: evalQuery,
   };
 }
