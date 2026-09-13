@@ -14,7 +14,8 @@ import LoginView from '@/pages/Login.vue';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 10, // 10 seconds
+      // staleTime: 1000 * 10, // 10 seconds
+      staleTime: 0, // Allow queries to be considered stale immediately after fetching
     },
   },
 });

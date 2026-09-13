@@ -4,7 +4,7 @@ import { type Eval } from '@/types/eval';
 import { useQuery } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
 import { storeToRefs } from 'pinia';
-import { groupBy, map, mapValues, pipe } from 'remeda';
+import { groupBy, mapValues, pipe } from 'remeda';
 import { computed, watch } from 'vue';
 
 async function getEvals(employeeName: string) {
@@ -30,6 +30,7 @@ export function useEval() {
     queryKey: ['evalData', user?.value?.emp_name || ''],
     queryFn: () => getEvals(user?.value?.emp_name || ''),
     enabled: isAuthenticated,
+    initialData: [] as Array<Eval>,
   });
 
   const dataGrouped = computed(() => {
