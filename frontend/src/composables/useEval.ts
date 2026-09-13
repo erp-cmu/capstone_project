@@ -3,7 +3,7 @@ import { type Eval } from '@/types/eval';
 import { useQuery } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
 import { groupBy } from 'lodash-es';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 async function getEvals(employeeName: string) {
   try {
@@ -34,6 +34,10 @@ export function useEval() {
       (ev: Eval) =>
         `${ev.score_recipient_type} - ${ev.score_recipient_type_dynamic}`,
     );
+  });
+
+  watch(evalQuery.data, () => {
+    console.log(evalQuery.data.value);
   });
 
   return {

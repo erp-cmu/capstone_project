@@ -280,6 +280,15 @@ def get_eval_data():
 		ignore_permissions=True,
 	)
 
+	# TODO: The current get_doc is inefficient for large number of doc.
+    # TODO: Change the implementation into 2-trip query 
+	#evals = frappe.get_all("CAP Eval", fields=["name", "evaluator"], limit=10000)
+	#eval_names = [e.name for e in evals]
+	#all_scores = frappe.get_all(
+	#	"CAP Eval Score", 
+	#	filters={"parent": ["in", eval_names]},
+	#	fields=["parent", "score_field_1", "score_field_2"]
+	#)
 	evals = []
 	for _eval in eval_names:
 		_doc = frappe.get_doc("CAP Eval", _eval.name)
@@ -295,7 +304,7 @@ def get_eval_data():
 		for _score in _eval.scores:
 			_score_dict = _score.as_dict()
 			_score_dict = {f"score_{k}": v for k, v in _score_dict.items()}
-			_eval_dict.update(_score_dict)
-			evals_scores.append(_eval_dict)
+			combined_dict = {**_eval_dict, **_score_dict}
+			evals_scores.append(combined_dict)
 
 	return evals_scores

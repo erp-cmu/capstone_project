@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import bgUrl from '@/assets/bg.jpg';
+</script>
 
 <template>
 	<section
 		class="relative flex min-h-screen items-center justify-center overflow-hidden bg-cover bg-center"
-		:style="{ backgroundImage: 'url(https://picsum.photos/1600/900?random=1)' }"
+		:style="{ backgroundImage: `url(${bgUrl})` }"
 	>
 		<div class="absolute inset-0 bg-slate-950/75"></div>
 

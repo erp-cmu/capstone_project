@@ -9,6 +9,6 @@ console.log(data);
 	Evaluation
 
 	<div v-if="data" v-for="el in data" :key="el.eval_name">
-		{{ el.eval_name }} {{ el.eval_evaluator_name }}
+		{{ el.eval_name }} {{ el.eval_evaluator_name }} {{ el.score_recipient_type_dynamic }}
 	</div>
 </template>

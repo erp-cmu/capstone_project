@@ -13,10 +13,10 @@ importers:
         version: 5.102.8(vue@3.5.42(typescript@6.0.3))
       debug:
         specifier: ^4.4.3
-        version: 4.4.3
+        version: 4.4.3(supports-color@7.2.0)
       frappe-ui:
         specifier: ^0.1.278
-        version: 0.1.278(@babel/parser@7.29.8)(@vue/compiler-sfc@3.5.42)(tailwindcss@3.4.19)(vue-router@5.3.1(@vue/compiler-sfc@3.5.42)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)))(rolldown@1.2.7)(vite@8.2.2(@types/node@24.13.3)(jiti@1.21.7))(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3))
+        version: 0.1.278(@babel/parser@7.29.8)(@vue/compiler-sfc@3.5.42)(supports-color@7.2.0)(tailwindcss@3.4.19)(vue-router@5.3.1(@vue/compiler-sfc@3.5.42)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)))(rolldown@1.2.7)(vite@8.2.2(@types/node@24.13.3)(jiti@1.21.7))(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3))
       highlight.js:
         specifier: ^11.12.0
         version: 11.12.0
@@ -29,6 +29,9 @@ importers:
       pinia:
         specifier: ^4.0.3
         version: 4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))
+      remeda:
+        specifier: ^2.48.0
+        version: 2.48.0
       vue:
         specifier: ^3.5.41
         version: 3.5.42(typescript@6.0.3)
@@ -38,7 +41,7 @@ importers:
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.7.1
-        version: 4.7.1(@vue/compiler-sfc@3.5.42)(prettier@3.9.6)
+        version: 4.7.1(@vue/compiler-sfc@3.5.42)(prettier@3.9.6)(supports-color@7.2.0)
       '@iconify-json/lucide':
         specifier: ^1.2.127
         version: 1.2.130
@@ -1435,6 +1438,10 @@ packages:
     peerDependencies:
       vue: '>= 3.4.0'
 
+  remeda@2.48.0:
+    resolution: {integrity: sha512-+tf74WyTpQT1lHI/zJeXOkMBqb6R9gNcd3T4DpXzjs26PdwEARCPKOjLAwJaQYrvSXS+nxsXMhEZD4NS40QuSg==}
+    engines: {node: '>=18.0.0'}
+
   remove-accents@0.5.0:
     resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
 
@@ -1851,7 +1858,7 @@ snapshots:
       '@babel/parser': 7.29.8
       '@babel/types': 7.29.8
 
-  '@babel/traverse@7.29.8':
+  '@babel/traverse@7.29.8(supports-color@7.2.0)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.8
@@ -1859,7 +1866,7 @@ snapshots:
       '@babel/parser': 7.29.8
       '@babel/template': 7.29.7
       '@babel/types': 7.29.8
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -1893,11 +1900,11 @@ snapshots:
       '@tanstack/vue-virtual': 3.13.37(vue@3.5.42(typescript@6.0.3))
       vue: 3.5.42(typescript@6.0.3)
 
-  '@ianvs/prettier-plugin-sort-imports@4.7.1(@vue/compiler-sfc@3.5.42)(prettier@3.9.6)':
+  '@ianvs/prettier-plugin-sort-imports@4.7.1(@vue/compiler-sfc@3.5.42)(prettier@3.9.6)(supports-color@7.2.0)':
     dependencies:
       '@babel/generator': 7.29.8
       '@babel/parser': 7.29.8
-      '@babel/traverse': 7.29.8
+      '@babel/traverse': 7.29.8(supports-color@7.2.0)
       '@babel/types': 7.29.8
       prettier: 3.9.6
       semver: 7.8.5
@@ -2593,9 +2600,11 @@ snapshots:
 
   dayjs@1.11.23: {}
 
-  debug@4.4.3:
+  debug@4.4.3(supports-color@7.2.0):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 7.2.0
 
   defaults@1.0.4:
     dependencies:
@@ -2626,10 +2635,10 @@ snapshots:
 
   electron-to-chromium@1.5.422: {}
 
-  engine.io-client@6.6.6:
+  engine.io-client@6.6.6(supports-color@7.2.0):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       engine.io-parser: 5.2.3
       ws: 8.21.3
       xmlhttprequest-ssl: 2.1.2
@@ -2685,7 +2694,7 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  frappe-ui@0.1.278(@babel/parser@7.29.8)(@vue/compiler-sfc@3.5.42)(tailwindcss@3.4.19)(vue-router@5.3.1(@vue/compiler-sfc@3.5.42)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)))(rolldown@1.2.7)(vite@8.2.2(@types/node@24.13.3)(jiti@1.21.7))(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3)):
+  frappe-ui@0.1.278(@babel/parser@7.29.8)(@vue/compiler-sfc@3.5.42)(supports-color@7.2.0)(tailwindcss@3.4.19)(vue-router@5.3.1(@vue/compiler-sfc@3.5.42)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)))(rolldown@1.2.7)(vite@8.2.2(@types/node@24.13.3)(jiti@1.21.7))(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3)):
     dependencies:
       '@floating-ui/dom': 1.8.0
       '@floating-ui/vue': 1.1.11(vue@3.5.42(typescript@6.0.3))
@@ -2736,12 +2745,12 @@ snapshots:
       radix-vue: 1.9.17(vue@3.5.42(typescript@6.0.3))
       reka-ui: 2.10.4(vue@3.5.42(typescript@6.0.3))
       slugify: 1.6.9
-      socket.io-client: 4.8.3
+      socket.io-client: 4.8.3(supports-color@7.2.0)
       tippy.js: 6.3.7
       typescript: 5.9.3
       unplugin-auto-import: 19.3.0(@vueuse/core@10.11.1(vue@3.5.42(typescript@6.0.3)))
-      unplugin-icons: 22.5.0(@vue/compiler-sfc@3.5.42)
-      unplugin-vue-components: 28.8.0(@babel/parser@7.29.8)(vue@3.5.42(typescript@6.0.3))
+      unplugin-icons: 22.5.0(@vue/compiler-sfc@3.5.42)(supports-color@7.2.0)
+      unplugin-vue-components: 28.8.0(@babel/parser@7.29.8)(supports-color@7.2.0)(vue@3.5.42(typescript@6.0.3))
       vue: 3.5.42(typescript@6.0.3)
       vue-router: 5.3.1(@vue/compiler-sfc@3.5.42)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)))(rolldown@1.2.7)(vite@8.2.2(@types/node@24.13.3)(jiti@1.21.7))(vue@3.5.42(typescript@6.0.3))
     transitivePeerDependencies:
@@ -3188,6 +3197,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
 
+  remeda@2.48.0: {}
+
   remove-accents@0.5.0: {}
 
   resolve@1.22.12:
@@ -3241,21 +3252,21 @@ snapshots:
 
   slugify@1.6.9: {}
 
-  socket.io-client@4.8.3:
+  socket.io-client@4.8.3(supports-color@7.2.0):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.4.3
-      engine.io-client: 6.6.6
-      socket.io-parser: 4.2.7
+      debug: 4.4.3(supports-color@7.2.0)
+      engine.io-client: 6.6.6(supports-color@7.2.0)
+      socket.io-parser: 4.2.7(supports-color@7.2.0)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  socket.io-parser@4.2.7:
+  socket.io-parser@4.2.7(supports-color@7.2.0):
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -3382,11 +3393,11 @@ snapshots:
     optionalDependencies:
       '@vueuse/core': 10.11.1(vue@3.5.42(typescript@6.0.3))
 
-  unplugin-icons@22.5.0(@vue/compiler-sfc@3.5.42):
+  unplugin-icons@22.5.0(@vue/compiler-sfc@3.5.42)(supports-color@7.2.0):
     dependencies:
       '@antfu/install-pkg': 1.1.0
       '@iconify/utils': 3.1.7
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       local-pkg: 1.2.1
       unplugin: 2.3.11
     optionalDependencies:
@@ -3414,10 +3425,10 @@ snapshots:
       pathe: 2.0.3
       picomatch: 4.0.7
 
-  unplugin-vue-components@28.8.0(@babel/parser@7.29.8)(vue@3.5.42(typescript@6.0.3)):
+  unplugin-vue-components@28.8.0(@babel/parser@7.29.8)(supports-color@7.2.0)(vue@3.5.42(typescript@6.0.3)):
     dependencies:
       chokidar: 3.6.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       local-pkg: 1.2.1
       magic-string: 0.30.21
       mlly: 1.8.2
