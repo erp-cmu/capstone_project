@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 
-// export const useAuthStore = defineStore('auth', {
-//   state: () => ({
-//     isAuthenticated: false,
-//     username: '',
-//   }),
-// });
+type GroupMode = 'recipient' | 'clo';
+
+export const useEvalStore = defineStore('eval', {
+  state: () => ({
+    group_mode: 'clo' as GroupMode,
+  }),
+});
