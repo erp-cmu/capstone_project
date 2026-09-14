@@ -7,8 +7,7 @@ import { call } from 'frappe-ui';
 
 async function getEvals(employeeName: string) {
   try {
-    const url =
-      'capstone_project.capstone_project.doctype.cap_eval.cap_eval.get_eval_data';
+    const url = 'capstone_project.api.eval.get_eval_data';
     const evals = await call(url, {
       method: 'POST',
       employee_name: employeeName,
@@ -37,4 +36,8 @@ export function useEval() {
     data: evalQuery.data,
     query: evalQuery,
   };
+}
+
+export function useEditEval() {
+  const url = 'capstone_project.api.eval.edit_score_value';
 }

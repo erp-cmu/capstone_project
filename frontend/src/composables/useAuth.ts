@@ -7,7 +7,7 @@ import { computed, ref } from 'vue';
 export const checkLoginStatus = async () => {
   try {
     const user: User = await call(
-      'capstone_project.utils.auth.get_current_user_info',
+      'capstone_project.api.auth.get_current_user_info',
     );
     return {
       isAuthenticated: true,
