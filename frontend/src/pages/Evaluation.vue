@@ -15,7 +15,6 @@ import {
 	rowExpandingFeature,
 	tableFeatures,
 	useTable,
-	type ColumnDef,
 } from '@tanstack/vue-table';
 import { Button } from 'frappe-ui';
 import { storeToRefs } from 'pinia';
@@ -44,41 +43,58 @@ const ch = createColumnHelper<typeof features, Eval>();
 // const columns: Array<ColumnDef<typeof features, Eval>> = ch.columns([
 const columns = computed(() =>
 	ch.columns([
-		ch.accessor('eval_evaluator_name', {
-			header: () => h('span', 'Evaluator Name'),
-			cell: (info) => h('span', info.getValue()),
-		}),
-		ch.accessor('eval_evaluation_round', {
-			header: () => h('span', 'Evaluation Round'),
-			cell: (info) => h('span', info.getValue()),
-		}),
+		ch.accessor(
+			(row) => {
+				if (group_mode.value === 'clo') {
+					return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.eval_clo_number}`;
+				} else if (group_mode.value === 'recipient') {
+					return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.score_recipient_type} - ${row.score_recipient_type_dynamic}`;
+				}
+			},
+			{
+				// Changing the ID dynamically forces TanStack Table to re-calculate grouping & cache
+				id: `grouping_column_${group_mode.value}`,
+				header: () => h('span', 'Grouping Column'),
+				cell: (info) => h('span', info.getValue()),
+			},
+		),
+
+		// ch.accessor('eval_evaluator_name', {
+		// 	header: () => h('span', 'Evaluator Name'),
+		// 	cell: (info) => h('span', info.getValue()),
+		// }),
+		// ch.accessor('eval_evaluation_round', {
+		// 	header: () => h('span', 'Evaluation Round'),
+		// 	cell: (info) => h('span', info.getValue()),
+		// }),
 		ch.accessor('eval_clo_number', {
 			header: () => h('span', 'CLO Number'),
 			// aggregationFn: 'count',
 			cell: (info) => {
 				return h('span', info.getValue());
 			},
-			// aggregatedCell: (info) => h('span', `${info.getValue()}`),
+			aggregatedCell: () => null,
 		}),
-		ch.accessor('score_recipient_type', {
-			header: () => h('span', 'Recipeint Type'),
-			cell: (info) => h('span', info.getValue()),
-		}),
-		// ch.accessor('score_recipient_type_dynamic', {
-		// 	header: () => h('span', 'Recipient (ID)'),
-		// 	// aggregationFn: 'count',
+		// ch.accessor('score_recipient_type', {
+		// 	header: () => h('span', 'Recipeint Type'),
 		// 	cell: (info) => h('span', info.getValue()),
-		// 	// aggregatedCell: (info) => h('span', `Total ${info.getValue()}`),
 		// }),
 
 		ch.accessor('score_recipient_type_dynamic', {
 			header: () => h('span', 'Recipient'),
 			// aggregationFn: 'count',
 			cell: (info) => {
+				// Hide value if the current row is a grouped parent row
+				// This is be
+				if (info.row.getIsGrouped()) {
+					return null; // Or return h('span', '—')
+				}
+
 				const recipient_info = info.row.original.score_recipient_information;
 				return h('span', recipient_info);
 			},
-			// aggregatedCell: (info) => h('span', `${info.getValue()}`),
+			// Explicitly return null/empty on aggregated rows
+			aggregatedCell: () => null,
 		}),
 
 		ch.accessor((row) => `${row.score_score_raw} (${row.score_score_scaled})`, {
@@ -87,6 +103,7 @@ const columns = computed(() =>
 			cell: (info) => {
 				return h('span', info.getValue());
 			},
+			aggregatedCell: () => null,
 		}),
 	]),
 );
@@ -94,20 +111,26 @@ const columns = computed(() =>
 const table = useTable({
 	key: 'eval-table',
 	features,
-	columns: columns.value,
+	get columns() {
+		return columns.value;
+	},
 	data: data,
 	state: {
+		// get grouping() {
+		// 	if (group_mode.value === 'clo') {
+		// 		return ['eval_evaluator_name', 'eval_evaluation_round', 'eval_clo_number'];
+		// 	} else if (group_mode.value === 'recipient') {
+		// 		return [
+		// 			'eval_evaluator_name',
+		// 			'eval_evaluation_round',
+		// 			'score_recipient_type',
+		// 			'score_recipient_type_dynamic',
+		// 		];
+		// 	}
+		// },
+		// Dynamically match the active column ID
 		get grouping() {
-			if (group_mode.value === 'clo') {
-				return ['eval_evaluator_name', 'eval_evaluation_round', 'eval_clo_number'];
-			} else if (group_mode.value === 'recipient') {
-				return [
-					'eval_evaluator_name',
-					'eval_evaluation_round',
-					'score_recipient_type',
-					'score_recipient_type_dynamic',
-				];
-			}
+			return [`grouping_column_${group_mode.value}`];
 		},
 		expanded: true,
 		columnVisibility: {
@@ -116,15 +139,15 @@ const table = useTable({
 	},
 });
 
-const depth = computed(() => {
-	if (group_mode.value === 'clo') {
-		return 2;
-	} else if (group_mode.value === 'recipient') {
-		return 3;
-	} else {
-		return 2;
-	}
-});
+// const depth = computed(() => {
+// 	if (group_mode.value === 'clo') {
+// 		return 2;
+// 	} else if (group_mode.value === 'recipient') {
+// 		return 3;
+// 	} else {
+// 		return 2;
+// 	}
+// });
 </script>
 
 <template>
@@ -155,7 +178,6 @@ const depth = computed(() => {
 					:key="cell.id"
 					:class="row.getIsGrouped() ? 'bg-gray-200 italic' : ''"
 					class="border-collapse border border-slate-800 p-2"
-					v-if="row.depth >= depth || !row.getIsGrouped()"
 				>
 					<!-- 1. Check if this specific column is what we are grouping by -->
 					<!-- If it's a member row, we hide the text so it doesn't repeat -->
