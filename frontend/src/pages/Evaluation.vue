@@ -1,92 +1,193 @@
 <script setup lang="ts">
 import { useEval } from '@/composables/useEval';
+import { useEvalStore } from '@/lib/store';
 import { type Eval } from '@/types/eval';
-import { FlexRender, tableFeatures, useTable, type ColumnDef } from '@tanstack/vue-table';
-import { h } from 'vue';
+import {
+	aggregationFn_count,
+	columnGroupingFeature,
+	columnOrderingFeature,
+	columnVisibilityFeature,
+	createColumnHelper,
+	createExpandedRowModel,
+	createGroupedRowModel,
+	FlexRender,
+	rowAggregationFeature,
+	rowExpandingFeature,
+	tableFeatures,
+	useTable,
+	type ColumnDef,
+} from '@tanstack/vue-table';
+import { Button } from 'frappe-ui';
+import { storeToRefs } from 'pinia';
+import { computed, h } from 'vue';
+
+const evalStore = useEvalStore();
+const { group_mode } = storeToRefs(evalStore);
 
 const { data } = useEval();
 
-const features = tableFeatures({});
+const features = tableFeatures({
+	columnOrderingFeature,
+	columnGroupingFeature,
+	rowAggregationFeature,
+	rowExpandingFeature,
+	columnVisibilityFeature,
+	groupedRowModel: createGroupedRowModel(),
+	expandedRowModel: createExpandedRowModel(),
+	aggregationFns: {
+		count: aggregationFn_count,
+	},
+});
 
-const columns: Array<ColumnDef<typeof features, Eval>> = [
-	{
-		accessorFn: (row) => row.eval_evaluator_name,
-		id: 'Evaluator Name',
-		header: () => h('span', 'Evaluator Name'),
-		cell: (info) => h('i', info.getValue<string>()),
-	},
-	{
-		accessorFn: (row) => row.score_recipient_type_dynamic,
-		id: 'Recipient Type',
-		header: () => h('span', 'Recipient Type'),
-		cell: (info) => h('i', info.getValue<string>()),
-	},
-	{
-		accessorFn: (row) => row.eval_clo_number,
-		id: 'CLO Number',
-		header: () => h('span', 'CLO Number'),
-		cell: (info) => h('i', info.getValue<string>()),
-	},
-];
+const ch = createColumnHelper<typeof features, Eval>();
+
+// const columns: Array<ColumnDef<typeof features, Eval>> = ch.columns([
+const columns = computed(() =>
+	ch.columns([
+		ch.accessor('eval_evaluator_name', {
+			header: () => h('span', 'Evaluator Name'),
+			cell: (info) => h('span', info.getValue()),
+		}),
+		ch.accessor('eval_evaluation_round', {
+			header: () => h('span', 'Evaluation Round'),
+			cell: (info) => h('span', info.getValue()),
+		}),
+		ch.accessor('eval_clo_number', {
+			header: () => h('span', 'CLO Number'),
+			// aggregationFn: 'count',
+			cell: (info) => {
+				return h('span', info.getValue());
+			},
+			// aggregatedCell: (info) => h('span', `${info.getValue()}`),
+		}),
+		ch.accessor('score_recipient_type', {
+			header: () => h('span', 'Recipeint Type'),
+			cell: (info) => h('span', info.getValue()),
+		}),
+		// ch.accessor('score_recipient_type_dynamic', {
+		// 	header: () => h('span', 'Recipient (ID)'),
+		// 	// aggregationFn: 'count',
+		// 	cell: (info) => h('span', info.getValue()),
+		// 	// aggregatedCell: (info) => h('span', `Total ${info.getValue()}`),
+		// }),
+
+		ch.accessor('score_recipient_type_dynamic', {
+			header: () => h('span', 'Recipient'),
+			// aggregationFn: 'count',
+			cell: (info) => {
+				const recipient_info = info.row.original.score_recipient_information;
+				return h('span', recipient_info);
+			},
+			// aggregatedCell: (info) => h('span', `${info.getValue()}`),
+		}),
+
+		ch.accessor((row) => `${row.score_score_raw} (${row.score_score_scaled})`, {
+			id: 'score_combined',
+			header: () => h('span', 'Score'),
+			cell: (info) => {
+				return h('span', info.getValue());
+			},
+		}),
+	]),
+);
 
 const table = useTable({
 	key: 'eval-table',
 	features,
-	columns,
+	columns: columns.value,
 	data: data,
+	state: {
+		get grouping() {
+			if (group_mode.value === 'clo') {
+				return ['eval_evaluator_name', 'eval_evaluation_round', 'eval_clo_number'];
+			} else if (group_mode.value === 'recipient') {
+				return [
+					'eval_evaluator_name',
+					'eval_evaluation_round',
+					'score_recipient_type',
+					'score_recipient_type_dynamic',
+				];
+			}
+		},
+		expanded: true,
+		columnVisibility: {
+			// score_recipient_type_dynamic: false,
+		},
+	},
+});
+
+const depth = computed(() => {
+	if (group_mode.value === 'clo') {
+		return 2;
+	} else if (group_mode.value === 'recipient') {
+		return 3;
+	} else {
+		return 2;
+	}
 });
 </script>
 
 <template>
 	<h1 class="text-2xl font-bold mb-4">Evaluation</h1>
 
-	<table>
+	<Button @click="() => (group_mode = group_mode === 'clo' ? 'recipient' : 'clo')">
+		Toggle Grouping Mode (Current: {{ group_mode }})
+	</Button>
+	<table class="border-collapse border border-slate-800 p-4">
 		<thead>
 			<tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-				<th v-for="header in headerGroup.headers" :key="header.id">
-					<FlexRender v-if="!header.isPlaceholder" :header="header" />
+				<th
+					v-for="header in headerGroup.headers"
+					:key="header.id"
+					class="border-collapse border border-slate-800 p-2"
+				>
+					<FlexRender
+						:render="header.column.columnDef.header"
+						:props="header.getContext()"
+					/>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr v-for="row in table.getRowModel().rows" :key="row.id">
-				<td v-for="cell in row.getAllCells()" :key="cell.id">
-					<FlexRender :cell="cell" />
+				<td
+					v-for="cell in row.getVisibleCells()"
+					:key="cell.id"
+					:class="row.getIsGrouped() ? 'bg-gray-200 italic' : ''"
+					class="border-collapse border border-slate-800 p-2"
+					v-if="row.depth >= depth || !row.getIsGrouped()"
+				>
+					<!-- 1. Check if this specific column is what we are grouping by -->
+					<!-- If it's a member row, we hide the text so it doesn't repeat -->
+					<template v-if="cell.column.getIsGrouped()">
+						<template v-if="row.getIsGrouped()">
+							<!-- Render the group name only once on the parent row header -->
+							<FlexRender
+								:render="cell.column.columnDef.cell"
+								:props="cell.getContext()"
+							/>
+						</template>
+						<template v-else>
+							<!-- Leave empty or add an indent placeholder for member rows -->
+							<span class="text-gray-300">—</span>
+						</template>
+					</template>
+
+					<!-- 2. For all other standard/aggregated columns, use your existing logic -->
+					<template v-else>
+						<FlexRender
+							v-if="cell.getIsAggregated() && cell.column.columnDef.aggregatedCell"
+							:render="cell.column.columnDef.aggregatedCell"
+							:props="cell.getContext()"
+						/>
+						<FlexRender
+							v-else
+							:render="cell.column.columnDef.cell"
+							:props="cell.getContext()"
+						/>
+					</template>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<!-- <div v-if="dataGrouped" v-for="(el1, el1_key) in dataGrouped" :key="el1_key" class="p-2">
-		<span>Evaluator: </span>
-		<span>
-			{{ el1_key }}
-		</span>
-		<div
-			v-for="(el2, el2_key) in el1"
-			:key="el2_key"
-			class="p-4 ml-4 border-2 border-gray-300"
-		>
-			<span>Recipeint Type: </span>
-			<span>
-				{{ el2_key }}
-			</span>
-			<div
-				v-for="(el3, el3_key) in el2"
-				:key="el3_key"
-				class="p-4 ml-4 border-2 border-gray-300"
-			>
-				<span>Recipient Info: </span>
-				<span>
-					{{ el3_key }}
-				</span>
-				<div
-					v-for="_eval in el3"
-					:key="_eval.eval_name"
-					class="p-4 ml-4 border-2 border-gray-300"
-				>
-					<span> {{ _eval.eval_name }} - {{ _eval.score_recipient_type_dynamic }} </span>
-				</div>
-			</div>
-		</div>
-	</div> -->
 </template>
