@@ -47,7 +47,7 @@ export function useEvalTable() {
       ch.accessor(
         (row) => {
           if (group_mode.value === 'clo') {
-            return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.eval_clo_number}`;
+            return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - CLO${row.eval_clo_number}`;
           } else if (group_mode.value === 'recipient') {
             return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.score_recipient_type} - ${row.score_recipient_type_dynamic}`;
           }
