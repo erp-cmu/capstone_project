@@ -6,6 +6,7 @@ import {
 	aggregationFn_count,
 	columnGroupingFeature,
 	columnOrderingFeature,
+	columnSizingFeature,
 	columnVisibilityFeature,
 	createColumnHelper,
 	createExpandedRowModel,
@@ -31,6 +32,7 @@ const features = tableFeatures({
 	rowAggregationFeature,
 	rowExpandingFeature,
 	columnVisibilityFeature,
+	columnSizingFeature,
 	groupedRowModel: createGroupedRowModel(),
 	expandedRowModel: createExpandedRowModel(),
 	aggregationFns: {
@@ -56,6 +58,9 @@ const columns = computed(() =>
 				id: `grouping_column_${group_mode.value}`,
 				header: () => h('span', 'Grouping Column'),
 				cell: (info) => h('span', info.getValue()),
+				size: 250,
+				minSize: 150,
+				maxSize: 300,
 			},
 		),
 
@@ -163,6 +168,7 @@ const table = useTable({
 					v-for="header in headerGroup.headers"
 					:key="header.id"
 					class="border-collapse border border-slate-800 p-2"
+					:style="{ width: `${header.getSize()}px` }"
 				>
 					<FlexRender
 						:render="header.column.columnDef.header"
