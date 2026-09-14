@@ -42,7 +42,6 @@ const features = tableFeatures({
 
 const ch = createColumnHelper<typeof features, Eval>();
 
-// const columns: Array<ColumnDef<typeof features, Eval>> = ch.columns([
 const columns = computed(() =>
 	ch.columns([
 		ch.accessor(
@@ -64,33 +63,19 @@ const columns = computed(() =>
 			},
 		),
 
-		// ch.accessor('eval_evaluator_name', {
-		// 	header: () => h('span', 'Evaluator Name'),
-		// 	cell: (info) => h('span', info.getValue()),
-		// }),
-		// ch.accessor('eval_evaluation_round', {
-		// 	header: () => h('span', 'Evaluation Round'),
-		// 	cell: (info) => h('span', info.getValue()),
-		// }),
 		ch.accessor('eval_clo_number', {
 			header: () => h('span', 'CLO Number'),
 			// aggregationFn: 'count',
 			cell: (info) => {
 				return h('span', info.getValue());
 			},
-			aggregatedCell: () => null,
+			aggregatedCell: () => null, // Optional
 		}),
-		// ch.accessor('score_recipient_type', {
-		// 	header: () => h('span', 'Recipeint Type'),
-		// 	cell: (info) => h('span', info.getValue()),
-		// }),
 
 		ch.accessor('score_recipient_type_dynamic', {
 			header: () => h('span', 'Recipient'),
 			// aggregationFn: 'count',
 			cell: (info) => {
-				// Hide value if the current row is a grouped parent row
-				// This is be
 				if (info.row.getIsGrouped()) {
 					return null; // Or return h('span', '—')
 				}
@@ -98,7 +83,7 @@ const columns = computed(() =>
 				const recipient_info = info.row.original.score_recipient_information;
 				return h('span', recipient_info);
 			},
-			// Explicitly return null/empty on aggregated rows
+			// Explicitly return null/empty on aggregated rows. This prevents the default behavior of showing the aggregated value.
 			aggregatedCell: () => null,
 		}),
 
@@ -121,19 +106,6 @@ const table = useTable({
 	},
 	data: data,
 	state: {
-		// get grouping() {
-		// 	if (group_mode.value === 'clo') {
-		// 		return ['eval_evaluator_name', 'eval_evaluation_round', 'eval_clo_number'];
-		// 	} else if (group_mode.value === 'recipient') {
-		// 		return [
-		// 			'eval_evaluator_name',
-		// 			'eval_evaluation_round',
-		// 			'score_recipient_type',
-		// 			'score_recipient_type_dynamic',
-		// 		];
-		// 	}
-		// },
-		// Dynamically match the active column ID
 		get grouping() {
 			return [`grouping_column_${group_mode.value}`];
 		},
@@ -143,16 +115,6 @@ const table = useTable({
 		},
 	},
 });
-
-// const depth = computed(() => {
-// 	if (group_mode.value === 'clo') {
-// 		return 2;
-// 	} else if (group_mode.value === 'recipient') {
-// 		return 3;
-// 	} else {
-// 		return 2;
-// 	}
-// });
 </script>
 
 <template>
