@@ -1,127 +1,26 @@
 <script setup lang="ts">
-import { useEval } from '@/composables/useEval';
+import EvalForm from '@/components/EvalForm.vue';
+import { useEvalTable } from '@/composables/useEvalTable';
 import { useEvalStore } from '@/lib/store';
-import { type Eval } from '@/types/eval';
-import {
-	aggregationFn_count,
-	columnGroupingFeature,
-	columnOrderingFeature,
-	columnSizingFeature,
-	columnVisibilityFeature,
-	createColumnHelper,
-	createExpandedRowModel,
-	createGroupedRowModel,
-	FlexRender,
-	rowAggregationFeature,
-	rowExpandingFeature,
-	tableFeatures,
-	useTable,
-} from '@tanstack/vue-table';
+import { FlexRender } from '@tanstack/vue-table';
 import { Button } from 'frappe-ui';
 import { storeToRefs } from 'pinia';
-import { computed, h } from 'vue';
 
 const evalStore = useEvalStore();
 const { group_mode } = storeToRefs(evalStore);
+const { table } = useEvalTable();
 
-const { data } = useEval();
-
-const features = tableFeatures({
-	columnOrderingFeature,
-	columnGroupingFeature,
-	rowAggregationFeature,
-	rowExpandingFeature,
-	columnVisibilityFeature,
-	columnSizingFeature,
-	groupedRowModel: createGroupedRowModel(),
-	expandedRowModel: createExpandedRowModel(),
-	aggregationFns: {
-		count: aggregationFn_count,
-	},
-});
-
-const ch = createColumnHelper<typeof features, Eval>();
-
-const columns = computed(() =>
-	ch.columns([
-		ch.accessor(
-			(row) => {
-				if (group_mode.value === 'clo') {
-					return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.eval_clo_number}`;
-				} else if (group_mode.value === 'recipient') {
-					return `${row.eval_evaluator_name} - ${row.eval_evaluation_round} - ${row.score_recipient_type} - ${row.score_recipient_type_dynamic}`;
-				}
-			},
-			{
-				// Changing the ID dynamically forces TanStack Table to re-calculate grouping & cache
-				id: `grouping_column_${group_mode.value}`,
-				header: () => h('span', 'Grouping Column'),
-				cell: (info) => h('span', info.getValue()),
-				size: 250,
-				minSize: 150,
-				maxSize: 300,
-			},
-		),
-
-		ch.accessor('eval_clo_number', {
-			header: () => h('span', 'CLO Number'),
-			// aggregationFn: 'count',
-			cell: (info) => {
-				return h('span', info.getValue());
-			},
-			aggregatedCell: () => null, // Optional
-		}),
-
-		ch.accessor('score_recipient_type_dynamic', {
-			header: () => h('span', 'Recipient'),
-			// aggregationFn: 'count',
-			cell: (info) => {
-				if (info.row.getIsGrouped()) {
-					return null; // Or return h('span', '—')
-				}
-
-				const recipient_info = info.row.original.score_recipient_information;
-				return h('span', recipient_info);
-			},
-			// Explicitly return null/empty on aggregated rows. This prevents the default behavior of showing the aggregated value.
-			aggregatedCell: () => null,
-		}),
-
-		ch.accessor((row) => `${row.score_score_raw} (${row.score_score_scaled})`, {
-			id: 'score_combined',
-			header: () => h('span', 'Score'),
-			cell: (info) => {
-				return h('span', info.getValue());
-			},
-			aggregatedCell: () => null,
-		}),
-	]),
-);
-
-const table = useTable({
-	key: 'eval-table',
-	features,
-	get columns() {
-		return columns.value;
-	},
-	data: data,
-	state: {
-		get grouping() {
-			return [`grouping_column_${group_mode.value}`];
-		},
-		expanded: true,
-		columnVisibility: {
-			// score_recipient_type_dynamic: false,
-		},
-	},
-});
+function handleEditEval(evalData: any) {
+	evalStore.setCurrentEval(evalData);
+	evalStore.toggleOpen();
+}
 </script>
 
 <template>
 	<h1 class="text-2xl font-bold mb-4">Evaluation</h1>
 
-	<Button @click="() => (group_mode = group_mode === 'clo' ? 'recipient' : 'clo')">
-		Toggle Grouping Mode (Current: {{ group_mode }})
+	<Button @click="() => evalStore.toggleGroupMode()">
+		Display Mode ({{ group_mode === 'clo' ? 'CLO' : 'Recipient' }})
 	</Button>
 	<table class="border-collapse border border-slate-800 p-4">
 		<thead>
@@ -147,9 +46,20 @@ const table = useTable({
 					:class="row.getIsGrouped() ? 'bg-gray-200 italic' : ''"
 					class="border-collapse border border-slate-800 p-2"
 				>
-					<!-- 1. Check if this specific column is what we are grouping by -->
+					<!-- Render Edit Button on leaf nodes in the 'actions' column -->
+					<template v-if="cell.column.id === 'actions'">
+						<Button
+							v-if="!row.getIsGrouped()"
+							appearance="subtle"
+							@click="() => handleEditEval(row.original)"
+						>
+							Edit
+						</Button>
+					</template>
+
+					<!-- Check if this specific column is what we are grouping by -->
 					<!-- If it's a member row, we hide the text so it doesn't repeat -->
-					<template v-if="cell.column.getIsGrouped()">
+					<template v-else-if="cell.column.getIsGrouped()">
 						<template v-if="row.getIsGrouped()">
 							<!-- Render the group name only once on the parent row header -->
 							<FlexRender
@@ -163,7 +73,7 @@ const table = useTable({
 						</template>
 					</template>
 
-					<!-- 2. For all other standard/aggregated columns, use your existing logic -->
+					<!-- For all other standard/aggregated columns, use your existing logic -->
 					<template v-else>
 						<FlexRender
 							v-if="cell.getIsAggregated() && cell.column.columnDef.aggregatedCell"
@@ -180,4 +90,7 @@ const table = useTable({
 			</tr>
 		</tbody>
 	</table>
+
+	<!-- Evaluation Form -->
+	<EvalForm />
 </template>

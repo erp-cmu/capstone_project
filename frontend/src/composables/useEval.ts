@@ -1,11 +1,9 @@
 import { useAuth } from '@/composables/useAuth';
-import { useEvalStore } from '@/lib/store';
 import { type Eval } from '@/types/eval';
 import { useQuery } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
-import { storeToRefs } from 'pinia';
-import { groupBy, mapValues, pipe } from 'remeda';
-import { computed, watch } from 'vue';
+
+// import { watch } from 'vue';
 
 async function getEvals(employeeName: string) {
   try {
@@ -23,8 +21,6 @@ async function getEvals(employeeName: string) {
 }
 
 export function useEval() {
-  const store = useEvalStore();
-  const { group_mode } = storeToRefs(store);
   const { isAuthenticated, user } = useAuth();
   const evalQuery = useQuery({
     queryKey: ['evalData', user?.value?.emp_name || ''],
@@ -33,51 +29,12 @@ export function useEval() {
     initialData: [] as Array<Eval>,
   });
 
-  const dataGrouped = computed(() => {
-    if (group_mode.value == 'recipient') {
-      return pipe(
-        evalQuery.data.value || [],
-        groupBy((ev) => ev.eval_evaluator_name),
-        mapValues((ev_eval) =>
-          pipe(
-            ev_eval,
-            groupBy((ev_eval) => ev_eval.score_recipient_type),
-            mapValues((ev_eval_name) =>
-              groupBy(
-                ev_eval_name,
-                (name) => name.score_recipient_type_dynamic,
-              ),
-            ),
-          ),
-        ),
-      );
-    } else if (group_mode.value === 'clo') {
-      return pipe(
-        evalQuery.data.value || [],
-        groupBy((ev) => ev.eval_evaluator_name),
-        mapValues((ev_eval) =>
-          pipe(
-            ev_eval,
-            groupBy((ev_eval) => ev_eval.eval_clo_number),
-            mapValues((ev_eval_number) =>
-              groupBy(
-                ev_eval_number,
-                (name) => name.score_recipient_type_dynamic,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-  });
-
-  watch(evalQuery.data, () => {
-    console.log(evalQuery.data.value);
-  });
+  // watch(evalQuery.data, () => {
+  //   console.log(evalQuery.data.value);
+  // });
 
   return {
     data: evalQuery.data,
-    dataGrouped: dataGrouped,
     query: evalQuery,
   };
 }
