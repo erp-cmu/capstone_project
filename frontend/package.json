@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/vue-query": "^5.102.8",
     "@tanstack/vue-table": "^9.2.4",
+    "@vee-validate/zod": "^4.15.1",
     "debug": "^4.4.3",
     "frappe-ui": "^0.1.278",
     "highlight.js": "^11.12.0",
@@ -19,7 +20,8 @@
     "pinia": "^4.0.3",
     "vee-validate": "^4.15.1",
     "vue": "^3.5.41",
-    "vue-router": "^5.3.0"
+    "vue-router": "^5.3.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
