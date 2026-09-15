@@ -9,7 +9,7 @@ def get_eval_data():
 	if employee_name == "":
 		filters = {}
 	else:
-		filters = {"evaluator": employee_name}
+		filters = {"evaluator": employee_name, "docstatus": ["!=", 2]}
 
 	eval_names = frappe.get_all(
 		"CAP Eval",

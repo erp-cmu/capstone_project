@@ -11,8 +11,10 @@ import {
   createColumnHelper,
   createExpandedRowModel,
   createGroupedRowModel,
+  createSortedRowModel,
   rowAggregationFeature,
   rowExpandingFeature,
+  rowSortingFeature,
   tableFeatures,
   useTable,
 } from '@tanstack/vue-table';
@@ -32,6 +34,8 @@ export function useEvalTable() {
     rowExpandingFeature,
     columnVisibilityFeature,
     columnSizingFeature,
+    rowSortingFeature,
+    sortedRowModel: createSortedRowModel(),
     groupedRowModel: createGroupedRowModel(),
     expandedRowModel: createExpandedRowModel(),
     aggregationFns: {
@@ -121,6 +125,7 @@ export function useEvalTable() {
       columnVisibility: {
         // score_recipient_type_dynamic: false,
       },
+      sorting: [{ id: 'eval_clo_number', desc: false }],
     },
   });
 

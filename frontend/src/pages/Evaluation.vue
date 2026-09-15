@@ -22,7 +22,7 @@ function handleEditEval(evalData: any) {
 			Display Mode ({{ group_mode === 'clo' ? 'CLO' : 'Recipient' }})
 		</Button>
 		<table
-			class="w-full overflow-hidden rounded-lg border-collapse border border-gray-200 shadow-sm"
+			class="w-full border-collapse overflow-hidden rounded-lg border border-gray-200 shadow-sm"
 		>
 			<thead>
 				<tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -30,12 +30,23 @@ function handleEditEval(evalData: any) {
 						v-for="header in headerGroup.headers"
 						:key="header.id"
 						class="border-collapse border border-violet-700 bg-violet-600 p-2 text-sm font-semibold text-white"
+						:class="{ 'cursor-pointer select-none': header.column.getCanSort() }"
+						@click="header.column.toggleSorting()"
 						:style="{ width: `${header.getSize()}px` }"
 					>
 						<FlexRender
 							:render="header.column.columnDef.header"
 							:props="header.getContext()"
 						/>
+						<span class="ml-2">
+							{{
+								header.column.getIsSorted() === 'asc'
+									? '🔼'
+									: header.column.getIsSorted() === 'desc'
+										? '🔽'
+										: ''
+							}}
+						</span>
 					</th>
 				</tr>
 			</thead>
