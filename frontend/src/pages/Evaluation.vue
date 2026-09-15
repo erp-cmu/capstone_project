@@ -18,7 +18,7 @@ function handleEditEval(evalData: any) {
 
 <template>
 	<div class="flex flex-col gap-4">
-		<Button @click="() => evalStore.toggleGroupMode()" variant="subtle" class="self-start">
+		<Button @click="() => evalStore.toggleGroupMode()" variant="solid" class="self-start">
 			Display Mode ({{ group_mode === 'clo' ? 'CLO' : 'Recipient' }})
 		</Button>
 		<table
@@ -58,13 +58,21 @@ function handleEditEval(evalData: any) {
 						class="border-collapse border border-gray-400 p-2 text-center align-middle"
 					>
 						<!-- Render Edit Button on leaf nodes in the 'actions' column -->
-						<template v-if="cell.column.id === 'actions'">
+						<template v-if="cell.column.id === 'actions' && !row.getIsGrouped()">
 							<Button
-								v-if="!row.getIsGrouped()"
-								appearance="subtle"
+								v-if="row.original.eval_docstatus === 0"
+								variant="solid"
 								@click="() => handleEditEval(row.original)"
 							>
 								Edit
+							</Button>
+							<Button
+								v-else
+								variant="subtle"
+								disabled
+								class="!bg-violet-300 !text-white"
+							>
+								Confirmed ✔️
 							</Button>
 						</template>
 

@@ -51,16 +51,16 @@ const { open, currentEval } = storeToRefs(store);
 						</span>
 						<div class="mt-2 flex gap-2">
 							<Button
-								@click="incrementScoreRaw"
-								variant="subtle"
-								class="!bg-violet-600 hover:!bg-violet-700 text-white px-3"
-								>+</Button
-							>
-							<Button
 								@click="decrementScoreRaw"
 								variant="subtle"
 								class="!bg-violet-600 hover:!bg-violet-700 text-white px-3"
 								>-</Button
+							>
+							<Button
+								@click="incrementScoreRaw"
+								variant="subtle"
+								class="!bg-violet-600 hover:!bg-violet-700 text-white px-3"
+								>+</Button
 							>
 						</div>
 					</div>
@@ -86,15 +86,15 @@ const { open, currentEval } = storeToRefs(store);
 		</template>
 		<template #actions>
 			<div class="flex justify-end gap-2">
+				<Button variant="subtle" @click="() => store.toggleOpen()" :loading="isPending"
+					>Cancel</Button
+				>
 				<Button
 					variant="solid"
 					class="!bg-violet-600 hover:!bg-violet-700"
 					@click="onSubmit"
 					:loading="isPending"
 					>Save</Button
-				>
-				<Button variant="subtle" @click="() => store.toggleOpen()" :loading="isPending"
-					>Cancel</Button
 				>
 			</div>
 		</template>
