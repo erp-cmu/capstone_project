@@ -18,16 +18,18 @@ function handleEditEval(evalData: any) {
 
 <template>
 	<div class="flex flex-col gap-4">
-		<Button @click="() => evalStore.toggleGroupMode()" class="self-end" variant="solid">
+		<Button @click="() => evalStore.toggleGroupMode()" variant="subtle" class="self-start">
 			Display Mode ({{ group_mode === 'clo' ? 'CLO' : 'Recipient' }})
 		</Button>
-		<table class="border-collapse p-4 mt-4 border border-gray-600">
+		<table
+			class="w-full overflow-hidden rounded-lg border-collapse border border-gray-200 shadow-sm"
+		>
 			<thead>
 				<tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
 					<th
 						v-for="header in headerGroup.headers"
 						:key="header.id"
-						class="border-collapse border border-gray-600 p-2"
+						class="border-collapse border border-violet-700 bg-violet-600 p-2 text-sm font-semibold text-white"
 						:style="{ width: `${header.getSize()}px` }"
 					>
 						<FlexRender
@@ -41,12 +43,12 @@ function handleEditEval(evalData: any) {
 				<tr
 					v-for="row in table.getRowModel().rows"
 					:key="row.id"
-					class="hover:bg-gray-300"
+					class="transition-colors"
 					:class="[
 						row.original.eval_name + row.original.score_name ==
 						(currentEval?.eval_name ?? '') + (currentEval?.score_name ?? '')
-							? 'bg-gray-800 text-white'
-							: 'bg-white',
+							? 'bg-violet-200 hover:bg-violet-300'
+							: 'bg-white hover:bg-violet-100',
 					]"
 				>
 					<td

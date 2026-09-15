@@ -46,7 +46,7 @@ export function useEvalForm() {
 
   // Sync form values whenever a new evaluation is opened
   watch(
-    () => currentEval.value,
+    currentEval,
     (newVal) => {
       vform.setValues({
         score_raw: String(newVal?.score_score_raw ?? '0'),
@@ -97,6 +97,22 @@ export function useEvalForm() {
     store.toggleOpen();
   });
 
+  function incrementScoreRaw() {
+    const currentRaw = Number(scoreRaw.value) || 0;
+    const maxScore = currentEval.value?.eval_score_max ?? 4;
+    if (currentRaw < maxScore) {
+      scoreRaw.value = String(currentRaw + 1);
+    }
+  }
+
+  function decrementScoreRaw() {
+    const currentRaw = Number(scoreRaw.value) || 0;
+    const minScore = currentEval.value?.eval_score_min ?? 0;
+    if (currentRaw > minScore) {
+      scoreRaw.value = String(currentRaw - 1);
+    }
+  }
+
   return {
     vform,
     scoreRaw,
@@ -105,5 +121,7 @@ export function useEvalForm() {
     scoreScaledAttrs,
     isPending: mutation.isPending,
     onSubmit,
+    incrementScoreRaw,
+    decrementScoreRaw,
   };
 }
