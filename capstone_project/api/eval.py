@@ -50,7 +50,7 @@ def get_eval_data():
 	return evals_scores
 
 
-@frappe.whitelist(allow_guest=True, methods=["POST"])
+@frappe.whitelist(allow_guest=False, methods=["POST"])
 def edit_score_value():
 	name = frappe.form_dict.get("name", "")
 	score_raw = frappe.form_dict.get("score_raw", "")
