@@ -7,7 +7,7 @@ def get_eval_data():
 	employee_name = frappe.form_dict.get("employee_name", "")
 
 	if employee_name == "":
-		filters = {}
+		filters = {"docstatus": ["!=", 2]}
 	else:
 		filters = {"evaluator": employee_name, "docstatus": ["!=", 2]}
 

@@ -19,7 +19,7 @@ import {
   useTable,
 } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
-import { computed, h } from 'vue';
+import { computed, h, ref } from 'vue';
 
 export function useEvalTable() {
   const evalStore = useEvalStore();
@@ -106,10 +106,11 @@ export function useEvalTable() {
         id: 'actions',
         header: () => h('span', 'Actions'),
         cell: () => null, // Left empty; rendered directly in the template
+        enableSorting: false,
       }),
     ]),
   );
-
+  const sorting = ref([{ id: 'eval_clo_number', desc: true }]);
   const table = useTable({
     key: 'eval-table',
     features,
@@ -125,7 +126,15 @@ export function useEvalTable() {
       columnVisibility: {
         // score_recipient_type_dynamic: false,
       },
-      sorting: [{ id: 'eval_clo_number', desc: false }],
+      get sorting() {
+        return sorting.value;
+      },
+    },
+    onSortingChange: (updaterOrValue) => {
+      sorting.value =
+        typeof updaterOrValue === 'function'
+          ? updaterOrValue(sorting.value)
+          : updaterOrValue;
     },
   });
 
