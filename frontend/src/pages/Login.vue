@@ -9,7 +9,10 @@ const { login, loginError } = useAuth();
 </script>
 
 <template>
-	<form @submit.prevent="login(username, password)" class="space-y-4 py-4">
+	<form
+		@submit.prevent="login(username, password)"
+		class="space-y-4 py-4 max-w-lg mx-auto border border-gray-300 rounded-lg p-6"
+	>
 		<h2>Login</h2>
 		<FormControl
 			type="text"
