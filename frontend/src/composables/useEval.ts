@@ -1,6 +1,6 @@
 import { useAuth } from '@/composables/useAuth';
 import { type Eval } from '@/types/eval';
-import { useQuery } from '@tanstack/vue-query';
+import { useMutation, useQuery } from '@tanstack/vue-query';
 import { call } from 'frappe-ui';
 
 // import { watch } from 'vue';
@@ -19,6 +19,22 @@ async function getEvals(employeeName: string) {
   }
 }
 
+async function updateScore(payload: UpdateScoreParams) {
+  try {
+    const url = 'capstone_project.api.eval.edit_score_value';
+    const response = await call(url, {
+      method: 'POST',
+      name: payload.name,
+      score_raw: payload.score_raw,
+      score_scaled: payload.score_scaled,
+    });
+    return response;
+  } catch (error) {
+    console.error('Error editing eval data:', error);
+    throw error;
+  }
+}
+
 export function useEval() {
   const { isAuthenticated, user } = useAuth();
   const evalQuery = useQuery({
@@ -32,12 +48,21 @@ export function useEval() {
   //   console.log(evalQuery.data.value);
   // });
 
+  const scoreMutation = useMutation({
+    mutationFn: updateScore,
+    onSuccess: () => {
+      evalQuery.refetch();
+    },
+  });
+
   return {
     data: evalQuery.data,
     query: evalQuery,
+    mutation: scoreMutation,
   };
 }
-
-export function useEditEval() {
-  const url = 'capstone_project.api.eval.edit_score_value';
+interface UpdateScoreParams {
+  name: string;
+  score_raw: number;
+  score_scaled: number;
 }
