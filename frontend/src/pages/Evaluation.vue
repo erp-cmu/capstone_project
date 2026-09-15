@@ -21,53 +21,54 @@ function handleEditEval(evalData: any) {
 		<Button @click="() => evalStore.toggleGroupMode()" variant="solid" class="self-start">
 			Display Mode ({{ group_mode === 'clo' ? 'CLO' : 'Recipient' }})
 		</Button>
-		<table
-			class="w-full border-collapse overflow-hidden rounded-lg border border-gray-200 shadow-sm"
-		>
-			<thead>
-				<tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-					<th
-						v-for="header in headerGroup.headers"
-						:key="header.id"
-						class="border-collapse border border-violet-700 bg-violet-600 p-2 text-sm font-semibold text-white"
-						:class="{ 'cursor-pointer select-none': header.column.getCanSort() }"
-						@click="header.column.toggleSorting()"
-						:style="{ width: `${header.getSize()}px` }"
+		<div class="w-full overflow-x-auto">
+			<table
+				class="w-full min-w-max border-collapse overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+			>
+				<thead>
+					<tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+						<th
+							v-for="header in headerGroup.headers"
+							:key="header.id"
+							class="border border-violet-700 bg-violet-600 p-2 text-sm font-semibold text-white"
+							:class="{ 'cursor-pointer select-none': header.column.getCanSort() }"
+							@click="header.column.toggleSorting()"
+							:style="{ width: `${header.getSize()}px` }"
+						>
+							<FlexRender
+								:render="header.column.columnDef.header"
+								:props="header.getContext()"
+							/>
+							<span class="ml-2">
+								{{
+									header.column.getIsSorted() === 'asc'
+										? '🔼'
+										: header.column.getIsSorted() === 'desc'
+											? '🔽'
+											: ''
+								}}
+							</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr
+						v-for="row in table.getRowModel().rows"
+						:key="row.id"
+						class="transition-colors"
+						:class="[
+							row.original.eval_name + row.original.score_name ==
+							(currentEval?.eval_name ?? '') + (currentEval?.score_name ?? '')
+								? 'bg-violet-200 hover:bg-violet-300'
+								: 'bg-white hover:bg-violet-100',
+						]"
 					>
-						<FlexRender
-							:render="header.column.columnDef.header"
-							:props="header.getContext()"
-						/>
-						<span class="ml-2">
-							{{
-								header.column.getIsSorted() === 'asc'
-									? '🔼'
-									: header.column.getIsSorted() === 'desc'
-										? '🔽'
-										: ''
-							}}
-						</span>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr
-					v-for="row in table.getRowModel().rows"
-					:key="row.id"
-					class="transition-colors"
-					:class="[
-						row.original.eval_name + row.original.score_name ==
-						(currentEval?.eval_name ?? '') + (currentEval?.score_name ?? '')
-							? 'bg-violet-200 hover:bg-violet-300'
-							: 'bg-white hover:bg-violet-100',
-					]"
-				>
-					<td
-						v-for="cell in row.getVisibleCells()"
-						:key="cell.id"
-						:class="row.getIsGrouped() ? 'bg-gray-200 italic' : ''"
-						class="border-collapse border border-gray-400 p-2 text-center align-middle"
-					>
+						<td
+							v-for="cell in row.getVisibleCells()"
+							:key="cell.id"
+							:class="row.getIsGrouped() ? 'bg-gray-200 italic' : ''"
+							class="border border-gray-400 p-2 text-center align-middle"
+						>
 						<!-- Render Edit Button on leaf nodes in the 'actions' column -->
 						<template v-if="cell.column.id === 'actions' && !row.getIsGrouped()">
 							<Button
@@ -119,9 +120,10 @@ function handleEditEval(evalData: any) {
 							/>
 						</template>
 					</td>
-				</tr>
-			</tbody>
-		</table>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<!-- Evaluation Form -->
 		<EvalForm />
